@@ -1,22 +1,20 @@
+import { ViewContent } from '@/components/Themed'
+import { FriendRequestList } from '@/components/friend'
+import { FriendScreenHeader } from '@/components/header'
+import { Line } from '@/components/theme'
 import { ScrollView, StatusBar, StyleSheet } from 'react-native'
 
-import { ViewContent } from '@/components/Themed'
-import { PostList } from '@/components/post'
-import { HomeScreenHeader } from '@/components/header'
-import { StoryListBar } from '@/components/story'
-import { Line } from '@/components/theme'
-
-export default function TabOneScreen() {
+export default function friend() {
   return (
     <ViewContent style={styles.container}>
       <ScrollView
         style={styles.scollViewContent}
         showsVerticalScrollIndicator={false}
       >
-        <HomeScreenHeader />
-        <StoryListBar style={styles.storyListBar} />
+        <FriendScreenHeader />
         <Line />
-        <PostList />
+        <FriendRequestList />
+        <Line />
       </ScrollView>
     </ViewContent>
   )
@@ -28,7 +26,8 @@ const styles = StyleSheet.create({
     paddingTop: StatusBar.currentHeight,
   },
   scollViewContent: {},
-  storyListBar: {
-    paddingVertical: 14,
+  line: {
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
   },
 })

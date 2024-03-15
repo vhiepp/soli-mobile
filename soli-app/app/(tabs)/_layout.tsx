@@ -1,59 +1,122 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import React from 'react'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { Link, Tabs } from 'expo-router'
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import Colors from '@/constants/Colors'
+import { useColorScheme } from '@/components/useColorScheme'
+import { useClientOnlyValue } from '@/components/useClientOnlyValue'
+import { AntDesign, Feather, Ionicons, Octicons } from '@expo/vector-icons'
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme()
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
+        tabBarIconStyle: styles.tabBarIconStyle,
+
         headerShown: useClientOnlyValue(false, true),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          headerShown: false,
+          title: '',
+          tabBarIcon: ({ color, size }) => (
+            <Octicons
+              name="home"
+              size={size}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="friend"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          headerShown: false,
+          title: '',
+          tabBarIcon: ({ color, size }) => (
+            <Feather
+              name="users"
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="add"
+        options={{
+          title: '',
+          tabBarIcon: ({ color, size }) => (
+            <Octicons
+              name="diff-added"
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="short"
+        options={{
+          title: '',
+          tabBarIcon: ({ color, size }) => (
+            <Octicons
+              name="video"
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="account"
+        options={{
+          title: '',
+          tabBarIcon: ({ color, size }) => (
+            <Octicons
+              name="person"
+              size={size}
+              color={color}
+            />
+          ),
         }}
       />
     </Tabs>
-  );
+  )
 }
+
+const styles = StyleSheet.create({
+  title: {
+    color: '#000',
+    fontSize: 26,
+    marginLeft: 15,
+    fontWeight: '600',
+    fontFamily: 'LobsterTwoBoldItalic',
+  },
+  header: {},
+  headerRight: {
+    marginRight: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 12,
+  },
+  heart: {
+    position: 'relative',
+  },
+  dotHeart: {
+    position: 'absolute',
+    width: 9,
+    height: 9,
+    backgroundColor: '#ff3853',
+    borderRadius: 10,
+    right: 0,
+    top: 1,
+  },
+  tabBarIconStyle: {},
+})
