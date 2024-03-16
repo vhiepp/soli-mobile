@@ -62,12 +62,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="short"
+        name="message"
         options={{
           title: '',
           tabBarIcon: ({ color, size }) => (
-            <Octicons
-              name="video"
+            <AntDesign
+              name="message1"
               size={size}
               color={color}
             />

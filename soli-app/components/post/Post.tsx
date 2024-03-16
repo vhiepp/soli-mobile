@@ -1,8 +1,19 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Image } from 'expo-image'
 import { AntDesign, Entypo, FontAwesome6, Ionicons } from '@expo/vector-icons'
 
 export default function Post() {
+  const handleSharePost = async () => {
+    try {
+      await Share.share({
+        message:
+          'https://tvusmc.com/bai-viet/song-tich-cuc-song-co-ich-vi-cong-dong-la-phuong-cham-ma-sv-truong-dh-tra-vinh-luon-huong-den',
+      })
+    } catch (error) {
+      console.error('Error sharing:', error)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -52,7 +63,7 @@ export default function Post() {
                 size={24}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleSharePost}>
               <Ionicons
                 name="paper-plane-outline"
                 size={27}

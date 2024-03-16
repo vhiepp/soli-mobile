@@ -16,8 +16,13 @@ export default function FriendScreenHeader() {
         </TouchableOpacity>
       </View>
       <View style={styles.headerBtnLink}>
-        <TouchableOpacity style={styles.btnLink}>
+        {/* <TouchableOpacity style={styles.btnLink}>
           <Link href={'/yourfriend'}>
+            <Text style={styles.textBtnLink}>Bạn bè</Text>
+          </Link>
+        </TouchableOpacity> */}
+        <TouchableOpacity style={styles.btnLink}>
+          <Link href={'/short/1123123123'}>
             <Text style={styles.textBtnLink}>Bạn bè</Text>
           </Link>
         </TouchableOpacity>

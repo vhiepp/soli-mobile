@@ -6,6 +6,8 @@ import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
 
 import { useColorScheme } from '@/components/useColorScheme'
+import { TouchableOpacity } from 'react-native'
+import { Feather } from '@expo/vector-icons'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -68,6 +70,24 @@ function RootLayoutNav() {
         <Stack.Screen
           name="friend-request"
           options={{ presentation: 'modal', title: 'Lời mời kết bạn' }}
+        />
+        <Stack.Screen
+          name="short/[id]"
+          options={{
+            presentation: 'modal',
+            title: 'Reels',
+            headerTransparent: true,
+            headerTintColor: '#fff',
+            headerRight: () => (
+              <TouchableOpacity>
+                <Feather
+                  name="camera"
+                  size={26}
+                  color="#fff"
+                />
+              </TouchableOpacity>
+            ),
+          }}
         />
       </Stack>
     </ThemeProvider>

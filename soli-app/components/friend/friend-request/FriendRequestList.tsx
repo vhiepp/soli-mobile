@@ -25,9 +25,6 @@ export default function FriendRequestList() {
         <FriendRequestItem />
         <FriendRequestItem />
         <FriendRequestItem />
-        <FriendRequestItem />
-        <FriendRequestItem />
-        <FriendRequestItem />
       </View>
     </View>
   )
