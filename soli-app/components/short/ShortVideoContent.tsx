@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Video, ResizeMode } from 'expo-av'
 import { useEffect, useRef, useState } from 'react'
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
@@ -8,10 +8,26 @@ export default function ShortVideoContent(props: any) {
   const { play, videoUrl } = props
   const video = useRef(null)
   const [status, setStatus] = useState({})
+  const [onloaded, setOnloaded] = useState(false)
+
+  const handleLoadError = (e: any) => {
+    console.log('load err', e)
+    video.current
+  }
+
+  const handleSharePost = async () => {
+    try {
+      await Share.share({
+        message: 'Test chia sẻ',
+      })
+    } catch (error) {
+      console.error('Error sharing:', error)
+    }
+  }
 
   useEffect(() => {
     try {
-      if (play) {
+      if (play && onloaded) {
         // @ts-ignore
         video.current?.playAsync()
       } else {
@@ -19,7 +35,11 @@ export default function ShortVideoContent(props: any) {
         video.current?.pauseAsync()
       }
     } catch (e) {}
-  }, [play])
+  }, [play, onloaded])
+
+  const handleOnloaded = () => {
+    setOnloaded(true)
+  }
 
   const handlePlayOrPauseVideo = () => {
     // @ts-ignore
@@ -34,11 +54,14 @@ export default function ShortVideoContent(props: any) {
           style={styles.video}
           source={{
             uri: videoUrl,
+            overrideFileExtensionAndroid: 'mp4',
           }}
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls={false}
           isLooping
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          onLoad={handleOnloaded}
+          onError={handleLoadError}
         />
       </View>
       <TouchableOpacity
@@ -104,7 +127,7 @@ export default function ShortVideoContent(props: any) {
             <Text style={{ color: '#fff', fontSize: 12 }}>16,1 nghìn</Text>
           </View>
           <View style={[styles.center]}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleSharePost}>
               <Ionicons
                 name="paper-plane-outline"
                 size={31}

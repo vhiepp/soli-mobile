@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -20,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dhiep2307.soliapp"
     },
     "web": {
       "bundler": "metro",
@@ -32,12 +35,20 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/BilboSwashCaps-Regular.tff", "./assets/fonts/Billabong.otf"]
+          "fonts": []
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "995852ae-a459-44a1-9459-970ea34b1f0e"
+      }
     }
   }
 }

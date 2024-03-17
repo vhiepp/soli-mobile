@@ -1,9 +1,5 @@
-import { Text, View } from "react-native";
+import { ViewContent } from '@/components/Themed'
 
 export default function Account() {
-  return (
-    <View>
-      <Text>account</Text>
-    </View>
-  );
+  return <ViewContent></ViewContent>
 }

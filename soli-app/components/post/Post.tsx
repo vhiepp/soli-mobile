@@ -6,8 +6,7 @@ export default function Post() {
   const handleSharePost = async () => {
     try {
       await Share.share({
-        message:
-          'https://tvusmc.com/bai-viet/song-tich-cuc-song-co-ich-vi-cong-dong-la-phuong-cham-ma-sv-truong-dh-tra-vinh-luon-huong-den',
+        message: 'Test chia sẻ',
       })
     } catch (error) {
       console.error('Error sharing:', error)
@@ -44,7 +43,7 @@ export default function Post() {
       <View style={styles.postContent}>
         <Text style={styles.textContent}>Đội mũ cà chua đi cà phê</Text>
         <Image
-          source={'https://i.pinimg.com/736x/c2/e9/02/c2e902e031e1d9d932411dd0b8ab5eef.jpg'}
+          source={'https://th.bing.com/th/id/OIG.MC3PObbEmuJhfsPJ8biQ'}
           style={styles.postImage}
         />
       </View>
@@ -80,7 +79,6 @@ export default function Post() {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 6,
     width: '100%',
     backgroundColor: '#fff',
     paddingVertical: 14,
@@ -136,7 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   postContent: {
-    height: 500,
+    height: 560,
     overflow: 'hidden',
   },
   textContent: {

@@ -7,6 +7,7 @@ import Colors from '@/constants/Colors'
 import { useColorScheme } from '@/components/useColorScheme'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 import { AntDesign, Feather, Ionicons, Octicons } from '@expo/vector-icons'
+import { MainTabBar } from '@/components/tab-bar'
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
@@ -19,19 +20,13 @@ export default function TabLayout() {
 
         headerShown: useClientOnlyValue(false, true),
       }}
+      tabBar={() => <MainTabBar />}
     >
       <Tabs.Screen
         name="index"
         options={{
           headerShown: false,
           title: '',
-          tabBarIcon: ({ color, size }) => (
-            <Octicons
-              name="home"
-              size={size}
-              color={color}
-            />
-          ),
         }}
       />
       <Tabs.Screen
@@ -39,52 +34,26 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           title: '',
-          tabBarIcon: ({ color, size }) => (
-            <Feather
-              name="users"
-              size={size}
-              color={color}
-            />
-          ),
         }}
       />
       <Tabs.Screen
         name="add"
         options={{
           title: '',
-          tabBarIcon: ({ color, size }) => (
-            <Octicons
-              name="diff-added"
-              size={size}
-              color={color}
-            />
-          ),
         }}
       />
       <Tabs.Screen
         name="message"
         options={{
+          headerShown: false,
           title: '',
-          tabBarIcon: ({ color, size }) => (
-            <AntDesign
-              name="message1"
-              size={size}
-              color={color}
-            />
-          ),
         }}
       />
       <Tabs.Screen
         name="account"
         options={{
+          headerShown: false,
           title: '',
-          tabBarIcon: ({ color, size }) => (
-            <Octicons
-              name="person"
-              size={size}
-              color={color}
-            />
-          ),
         }}
       />
     </Tabs>
