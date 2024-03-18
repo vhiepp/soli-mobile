@@ -28,6 +28,7 @@ export default function MainTabBar() {
             name="video-library"
             size={26}
           />
+          <View style={styles.dotActive}></View>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -50,6 +51,7 @@ export default function MainTabBar() {
           name="users"
           size={24}
         />
+        {currentScreen === 1 && <View style={styles.dotActive}></View>}
       </TouchableOpacity>
       <View style={styles.link}></View>
       <TouchableOpacity
@@ -71,6 +73,7 @@ export default function MainTabBar() {
           name="message1"
           size={24}
         />
+        {currentScreen === 3 && <View style={styles.dotActive}></View>}
       </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.6}
@@ -99,16 +102,17 @@ const styles = StyleSheet.create({
     flexBasis: '20%',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingTop: 12,
+    paddingBottom: 14,
   },
   authorAvatar: {
-    width: 30,
-    height: 30,
+    width: 32,
+    height: 32,
     borderRadius: 35,
   },
   authorAvatarActive: {
     borderWidth: 1,
-    borderColor: '#1b1b1b',
+    borderColor: '#22d6f2',
   },
   btnAdd: {
     backgroundColor: '#0681ee',
@@ -119,5 +123,13 @@ const styles = StyleSheet.create({
     left: positionBtnAdd,
     top: -20,
     elevation: 3,
+  },
+  dotActive: {
+    position: 'absolute',
+    width: 4,
+    height: 4,
+    borderRadius: 30,
+    backgroundColor: '#22d6f2',
+    bottom: 10,
   },
 })

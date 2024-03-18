@@ -72,6 +72,10 @@ function RootLayoutNav() {
           options={{ presentation: 'modal', title: 'Lời mời kết bạn' }}
         />
         <Stack.Screen
+          name="notification"
+          options={{ presentation: 'modal', title: 'Thông báo', headerShown: false }}
+        />
+        <Stack.Screen
           name="short/[id]"
           options={{
             presentation: 'modal',

@@ -1,18 +1,20 @@
-import { Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { Video, ResizeMode } from 'expo-av'
+import { ActivityIndicator, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ResizeMode, Video } from 'expo-av'
 import { useEffect, useRef, useState } from 'react'
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 
 export default function ShortVideoContent(props: any) {
-  const { play, videoUrl } = props
-  const video = useRef(null)
+  const { play, videoUrl, isMuted, onChangeStatusMuted } = props
+  let video: any = useRef(null)
   const [status, setStatus] = useState({})
   const [onloaded, setOnloaded] = useState(false)
+  const [isUserPauseVideo, setIsUserPauseVideo] = useState(false)
+  const [videoSize, setVideoSize] = useState({ width: 1, height: 1 })
 
   const handleLoadError = (e: any) => {
     console.log('load err', e)
-    video.current
+    // @ts-ignore
   }
 
   const handleSharePost = async () => {
@@ -26,24 +28,49 @@ export default function ShortVideoContent(props: any) {
   }
 
   useEffect(() => {
+    async function fetchVideoInfo() {
+      try {
+      } catch (error) {
+        console.error('Error fetching video info:', error)
+      }
+    }
+    fetchVideoInfo()
+
     try {
       if (play && onloaded) {
         // @ts-ignore
         video.current?.playAsync()
       } else {
         // @ts-ignore
-        video.current?.pauseAsync()
+        video.current?.replayAsync()
+        video.current?.stopAsync()
       }
     } catch (e) {}
   }, [play, onloaded])
 
+  // @ts-ignore
   const handleOnloaded = () => {
     setOnloaded(true)
   }
 
+  // @ts-ignore
+  const handleVideoOnReady = ({ naturalSize }) => {
+    const { width, height } = naturalSize
+    setVideoSize({
+      width,
+      height,
+    })
+  }
+
   const handlePlayOrPauseVideo = () => {
     // @ts-ignore
-    status.isPlaying ? video.current.pauseAsync() : video.current.playAsync()
+    if (status.isPlaying) {
+      video.current.pauseAsync()
+      setIsUserPauseVideo(true)
+    } else {
+      video.current.playAsync()
+      setIsUserPauseVideo(false)
+    }
   }
 
   return (
@@ -56,12 +83,15 @@ export default function ShortVideoContent(props: any) {
             uri: videoUrl,
             overrideFileExtensionAndroid: 'mp4',
           }}
-          resizeMode={ResizeMode.CONTAIN}
+          resizeMode={videoSize.width / videoSize.height < 1.7 ? ResizeMode.COVER : ResizeMode.CONTAIN}
           useNativeControls={false}
           isLooping
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          // @ts-ignore
           onLoad={handleOnloaded}
           onError={handleLoadError}
+          isMuted={isMuted}
+          onReadyForDisplay={handleVideoOnReady}
         />
       </View>
       <TouchableOpacity
@@ -69,22 +99,33 @@ export default function ShortVideoContent(props: any) {
         style={[styles.btnPlayContent, styles.videoContent, !status.isPlaying ? styles.btnPlayContentActive : {}]}
         onPress={handlePlayOrPauseVideo}
       ></TouchableOpacity>
-      <View
-        style={[
-          styles.videoContent,
-          { zIndex: 2 },
-          styles.centerScreen,
+      <View style={[styles.videoContent, { zIndex: 2 }, styles.centerScreen]}>
+        {
           // @ts-ignore
-          status.isPlaying ? { display: 'none' } : { display: 'flex' },
-        ]}
-      >
-        <Ionicons
-          name="play"
-          style={styles.btnPlay}
-        />
+          !status.isPlaying && onloaded && isUserPauseVideo && (
+            <Ionicons
+              name="play"
+              style={styles.btnPlay}
+            />
+          )
+        }
+        {
+          // @ts-ignore
+          !status.isPlaying && !isUserPauseVideo && (
+            <ActivityIndicator
+              size={40}
+              color="#ccc"
+            />
+          )
+        }
       </View>
+
       <View style={styles.boxContent}>
         <View style={styles.boxContentLeft}>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={handlePlayOrPauseVideo}
+          ></TouchableOpacity>
           <View style={styles.boxAuthor}>
             <Image
               source={
@@ -102,7 +143,7 @@ export default function ShortVideoContent(props: any) {
             ellipsizeMode="tail"
             style={styles.videoDesc}
           >
-            Everyone deserve to be happy...Everyone deserve to be happy...
+            Everyone deserve to be happy... Everyone deserve to be happy...
           </Text>
         </View>
         <View style={styles.boxContentRight}>
@@ -137,12 +178,23 @@ export default function ShortVideoContent(props: any) {
             <Text style={{ color: '#fff', fontSize: 12 }}>Chia sẻ</Text>
           </View>
           <View style={[styles.center]}>
-            <TouchableOpacity>
-              <Entypo
-                name="dots-three-vertical"
-                size={20}
-                color="#fff"
-              />
+            <TouchableOpacity
+              onPress={onChangeStatusMuted}
+              activeOpacity={0.6}
+            >
+              {isMuted ? (
+                <Ionicons
+                  name="volume-mute-outline"
+                  size={26}
+                  color="#fff"
+                />
+              ) : (
+                <Ionicons
+                  name="volume-high-outline"
+                  size={26}
+                  color="#fff"
+                />
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -232,7 +284,7 @@ const styles = StyleSheet.create({
   videoDesc: {
     color: '#fff',
     fontSize: 16,
-    maxWidth: 250,
+    maxWidth: 260,
   },
   center: {
     alignItems: 'center',

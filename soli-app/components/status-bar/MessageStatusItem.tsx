@@ -21,9 +21,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   authorAvatar: {
-    width: 85,
-    height: 85,
-    borderRadius: 85,
+    width: 75,
+    height: 75,
+    borderRadius: 75,
     borderWidth: 1,
     borderColor: '#ccc',
   },

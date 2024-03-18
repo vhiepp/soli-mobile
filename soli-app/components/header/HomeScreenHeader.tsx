@@ -1,7 +1,10 @@
 import { AntDesign, Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function HomeScreenHeader() {
+  const router = useRouter()
+
   return (
     <View style={styles.header}>
       <Text style={styles.title}>Soli</Text>
@@ -11,13 +14,14 @@ export default function HomeScreenHeader() {
             name="heart-outline"
             size={28}
           />
-          <View style={styles.dotHeart}></View>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <AntDesign
-            name="message1"
-            size={23}
+        <TouchableOpacity onPress={() => router.push('/notification')}>
+          <Ionicons
+            name="notifications-outline"
+            size={28}
+            color="black"
           />
+          <View style={styles.dotNotification}></View>
         </TouchableOpacity>
       </View>
     </View>
@@ -58,6 +62,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     right: 0,
     top: 1,
+  },
+  dotNotification: {
+    position: 'absolute',
+    width: 9,
+    height: 9,
+    backgroundColor: '#ff3853',
+    borderRadius: 10,
+    right: 3,
+    top: 2,
   },
   tabBarIconStyle: {},
 })
