@@ -17,12 +17,14 @@ export default function Post() {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Image
-            source={
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'
-            }
-            style={styles.authorAvatar}
-          />
+          <View style={styles.authorAvatar}>
+            <Image
+              source={
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'
+              }
+              style={{ width: '100%', height: '100%' }}
+            />
+          </View>
           <View style={styles.authorNameBox}>
             <Text style={styles.authorName}>_vhiep</Text>
             <Text style={styles.authorDesc}>Gợi ý cho bạn</Text>
@@ -110,7 +112,8 @@ const styles = StyleSheet.create({
   authorAvatar: {
     width: 40,
     height: 40,
-    borderRadius: 40,
+    borderRadius: 100,
+    overflow: 'hidden',
     objectFit: 'cover',
   },
   headerRight: {

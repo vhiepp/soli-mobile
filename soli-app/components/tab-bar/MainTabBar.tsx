@@ -80,10 +80,14 @@ export default function MainTabBar() {
         style={styles.link}
         onPress={() => handleLinkToScreen('/(tabs)/account', 4)}
       >
-        <Image
-          source={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'}
-          style={[styles.authorAvatar, currentScreen === 4 ? styles.authorAvatarActive : {}]}
-        />
+        <View style={[styles.authorAvatar, currentScreen === 4 ? styles.authorAvatarActive : {}]}>
+          <Image
+            source={
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'
+            }
+            style={{ width: '100%', height: '100%' }}
+          />
+        </View>
       </TouchableOpacity>
     </View>
   )
@@ -108,7 +112,8 @@ const styles = StyleSheet.create({
   authorAvatar: {
     width: 32,
     height: 32,
-    borderRadius: 35,
+    borderRadius: 100,
+    overflow: 'hidden',
   },
   authorAvatarActive: {
     borderWidth: 1,

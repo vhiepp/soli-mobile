@@ -4,10 +4,12 @@ import { StyleSheet, Text, View } from 'react-native'
 export default function MessageItem() {
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.roomImage}
-        source={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'}
-      />
+      <View style={styles.roomImage}>
+        <Image
+          source={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'}
+          style={{ width: '100%', height: '100%' }}
+        />
+      </View>
       <View style={styles.boxContent}>
         <Text
           style={styles.roomName}
@@ -42,7 +44,8 @@ const styles = StyleSheet.create({
   roomImage: {
     width: 70,
     height: 70,
-    borderRadius: 85,
+    borderRadius: 100,
+    overflow: 'hidden',
   },
   boxContent: {
     gap: 4,
