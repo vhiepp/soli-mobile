@@ -1,12 +1,10 @@
 import React from 'react'
-import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { Link, Tabs } from 'expo-router'
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Tabs } from 'expo-router'
+import { StyleSheet } from 'react-native'
 
 import Colors from '@/constants/Colors'
 import { useColorScheme } from '@/components/useColorScheme'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
-import { AntDesign, Feather, Ionicons, Octicons } from '@expo/vector-icons'
 import { MainTabBar } from '@/components/tab-bar'
 
 export default function TabLayout() {

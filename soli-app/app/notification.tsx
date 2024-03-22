@@ -5,6 +5,9 @@ export default function NotificationScreen() {
   return (
     <ViewContent style={styles.container}>
       <Text>Thông báo</Text>
+      <Text>Thông báo</Text>
+      <Text>Thông báo</Text>
+      <Text>Thông báo</Text>
     </ViewContent>
   )
 }

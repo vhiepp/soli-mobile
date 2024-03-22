@@ -22,6 +22,7 @@ export default function message() {
     <ViewContent style={styles.container}>
       <ScrollView
         showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshSpinner
             refreshing={refreshing}

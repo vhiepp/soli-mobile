@@ -36,10 +36,9 @@ export default function MessageItem() {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    paddingHorizontal: 14,
     display: 'flex',
     flexDirection: 'row',
-    paddingHorizontal: 14,
   },
   roomImage: {
     width: 70,

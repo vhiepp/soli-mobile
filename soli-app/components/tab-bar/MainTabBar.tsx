@@ -1,26 +1,26 @@
+import { useUserStateContext } from '@/contexts'
 import { AntDesign, Feather, MaterialIcons, Octicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
-import { Href, Link, useRouter } from 'expo-router'
-import { useState } from 'react'
-import { Dimensions, StyleSheet, Touchable, TouchableOpacity, View } from 'react-native'
+import { usePathname, useRouter } from 'expo-router'
+import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
 
-const { width, height } = Dimensions.get('window')
+const { width } = Dimensions.get('window')
 const widthBtnAdd = 56
 const positionBtnAdd = width / 2 - widthBtnAdd / 2
 
 export default function MainTabBar() {
   const router = useRouter()
-  const [currentScreen, setCurrentScreen] = useState(0)
+  const pathname = usePathname()
+  const { userInfo } = useUserStateContext()
 
-  const handleLinkToScreen = (url: any, screenIndex: number) => {
-    router.replace(url)
-    setCurrentScreen(screenIndex)
+  const handleLinkToScreen = (url: any) => {
+    router.navigate(url)
   }
   return (
     <View style={styles.container}>
-      {currentScreen === 0 ? (
+      {pathname === '/' ? (
         <TouchableOpacity
-          activeOpacity={0.6}
+          activeOpacity={0.7}
           style={styles.link}
           onPress={() => router.push('/short/1')}
         >
@@ -32,9 +32,9 @@ export default function MainTabBar() {
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
-          activeOpacity={0.6}
+          activeOpacity={0.7}
           style={styles.link}
-          onPress={() => handleLinkToScreen('/(tabs)/', 0)}
+          onPress={() => handleLinkToScreen('/(tabs)/')}
         >
           <Octicons
             name="home"
@@ -43,20 +43,21 @@ export default function MainTabBar() {
         </TouchableOpacity>
       )}
       <TouchableOpacity
-        activeOpacity={0.6}
+        activeOpacity={0.7}
         style={styles.link}
-        onPress={() => handleLinkToScreen('/(tabs)/friend', 1)}
+        onPress={() => handleLinkToScreen('/(tabs)/friend')}
       >
         <Feather
           name="users"
           size={24}
         />
-        {currentScreen === 1 && <View style={styles.dotActive}></View>}
+        {pathname === '/friend' && <View style={styles.dotActive}></View>}
       </TouchableOpacity>
       <View style={styles.link}></View>
       <TouchableOpacity
-        activeOpacity={0.6}
+        activeOpacity={0.7}
         style={[styles.link, styles.btnAdd]}
+        onPress={() => router.push('/sign-in')}
       >
         <MaterialIcons
           name="add"
@@ -65,25 +66,28 @@ export default function MainTabBar() {
         />
       </TouchableOpacity>
       <TouchableOpacity
-        activeOpacity={0.6}
+        activeOpacity={0.7}
         style={styles.link}
-        onPress={() => handleLinkToScreen('/(tabs)/message', 3)}
+        onPress={() => handleLinkToScreen('/(tabs)/message')}
       >
         <AntDesign
           name="message1"
           size={24}
         />
-        {currentScreen === 3 && <View style={styles.dotActive}></View>}
+        {pathname === '/message' && <View style={styles.dotActive}></View>}
       </TouchableOpacity>
       <TouchableOpacity
-        activeOpacity={0.6}
+        activeOpacity={0.7}
         style={styles.link}
-        onPress={() => handleLinkToScreen('/(tabs)/account', 4)}
+        onPress={() => handleLinkToScreen('/(tabs)/account')}
       >
-        <View style={[styles.authorAvatar, currentScreen === 4 ? styles.authorAvatarActive : {}]}>
+        <View style={[styles.authorAvatar, pathname === '/account' ? styles.authorAvatarActive : {}]}>
           <Image
             source={
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'
+              userInfo
+                ? // @ts-ignore
+                  userInfo?.current_avatar.url
+                : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'
             }
             style={{ width: '100%', height: '100%' }}
           />

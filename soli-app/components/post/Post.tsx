@@ -1,8 +1,17 @@
-import { Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Image } from 'expo-image'
 import { AntDesign, Entypo, FontAwesome6, Ionicons } from '@expo/vector-icons'
+import { CommentBottomSheet } from '../comment'
+import { useState } from 'react'
 
-export default function Post() {
+const widthScreen = Dimensions.get('window').width
+
+const Post = ({ post }: any) => {
+  const [openCommentModal, setOpenCommentModal] = useState(false)
+  const [imageHeight, setImageHeight] = useState(520)
+  const handleOpenModalComment = () => {
+    setOpenCommentModal(true)
+  }
   const handleSharePost = async () => {
     try {
       await Share.share({
@@ -15,18 +24,26 @@ export default function Post() {
 
   return (
     <View style={styles.container}>
+      {openCommentModal && (
+        <CommentBottomSheet
+          openModal={true}
+          onModalClose={() => setOpenCommentModal(false)}
+        />
+      )}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.authorAvatar}>
             <Image
               source={
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'
+                post?.author.current_avatar.url
+                  ? post?.author.current_avatar.url
+                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'
               }
               style={{ width: '100%', height: '100%' }}
             />
           </View>
           <View style={styles.authorNameBox}>
-            <Text style={styles.authorName}>_vhiep</Text>
+            <Text style={styles.authorName}>{post?.author.uid}</Text>
             <Text style={styles.authorDesc}>Gợi ý cho bạn</Text>
           </View>
         </View>
@@ -42,11 +59,22 @@ export default function Post() {
           </TouchableOpacity>
         </View>
       </View>
+
       <View style={styles.postContent}>
-        <Text style={styles.textContent}>Đội mũ cà chua đi cà phê</Text>
+        <Text
+          style={styles.textContent}
+          numberOfLines={2}
+        >
+          {post?.caption}
+        </Text>
         <Image
-          source={'https://th.bing.com/th/id/OIG.MC3PObbEmuJhfsPJ8biQ'}
-          style={styles.postImage}
+          source={post?.media[0].file_url}
+          style={[styles.postImage, { height: 520 }]}
+          onLoad={(e) => {
+            // const { width, height } = e.source
+            // const persent = (width - widthScreen) / width
+            // setImageHeight(height - persent * height)
+          }}
         />
       </View>
       <View style={styles.footer}>
@@ -58,7 +86,7 @@ export default function Post() {
                 size={30}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleOpenModalComment}>
               <AntDesign
                 name="message1"
                 size={24}
@@ -84,6 +112,9 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#fff',
     paddingVertical: 14,
+    position: 'relative',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
   },
   header: {
     paddingHorizontal: 14,
@@ -91,23 +122,31 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
   },
   headerLeft: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   authorNameBox: {
     paddingLeft: 10,
+    paddingTop: 2,
+    gap: 2,
   },
   authorName: {
     fontSize: 16,
+    lineHeight: 16,
     fontWeight: '700',
-    lineHeight: 18,
+    margin: 0,
+    padding: 0,
+    minWidth: 120,
   },
   authorDesc: {
     fontSize: 12,
     color: '#a3a2a2',
+    margin: 0,
+    padding: 0,
+    maxWidth: 90,
   },
   authorAvatar: {
     width: 40,
@@ -137,7 +176,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   postContent: {
-    height: 560,
     overflow: 'hidden',
   },
   textContent: {
@@ -147,7 +185,6 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
   },
   postImage: {
-    height: '100%',
     objectFit: 'cover',
     width: '100%',
   },
@@ -176,3 +213,5 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 })
+
+export default Post
