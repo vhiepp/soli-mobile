@@ -1,9 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import 'react-native-reanimated'
 import 'react-native-gesture-handler'
-import { DarkTheme, DefaultTheme, ThemeProvider, useRoute } from '@react-navigation/native'
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { Stack } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect, useState } from 'react'
 
@@ -14,7 +14,7 @@ import { ClerkProvider } from '@clerk/clerk-expo'
 
 import NetInfo from '@react-native-community/netinfo'
 import { NoInternet } from '@/components/internet'
-import { UserContextProvider } from '@/contexts'
+import { UserContextProvider, useUserStateContext } from '@/contexts'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
@@ -104,20 +104,6 @@ function RootLayoutNav() {
               options={{ presentation: 'modal', title: 'Thông báo', headerShown: false }}
             />
             <Stack.Screen
-              name="sign-in"
-              options={{ presentation: 'modal', headerShown: false }}
-            />
-            <Stack.Screen
-              name="oauth-native-callback"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="no-internet"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
               name="short/[id]"
               options={{
                 presentation: 'modal',
@@ -133,6 +119,20 @@ function RootLayoutNav() {
                     />
                   </TouchableOpacity>
                 ),
+              }}
+            />
+            <Stack.Screen
+              name="sign-in"
+              options={{ presentation: 'modal', headerShown: false }}
+            />
+            <Stack.Screen
+              name="oauth-native-callback"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="no-internet"
+              options={{
+                headerShown: false,
               }}
             />
           </Stack>

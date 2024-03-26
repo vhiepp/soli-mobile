@@ -1,3 +1,3 @@
 export { default as useAsyncStorage } from './useAsyncStorage'
-export { default as useWarmUpBrowser } from './useWarmUpBrowser'
-export { default as useMyAuth } from './useMyAuth'
+export { default as useStorageAuth } from './useStorageAuth'
+export * from './useAuthorization'

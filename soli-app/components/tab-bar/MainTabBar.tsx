@@ -7,6 +7,7 @@ import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
 const { width } = Dimensions.get('window')
 const widthBtnAdd = 56
 const positionBtnAdd = width / 2 - widthBtnAdd / 2
+const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
 
 export default function MainTabBar() {
   const router = useRouter()
@@ -16,6 +17,7 @@ export default function MainTabBar() {
   const handleLinkToScreen = (url: any) => {
     router.navigate(url)
   }
+
   return (
     <View style={styles.container}>
       {pathname === '/' ? (
@@ -84,10 +86,11 @@ export default function MainTabBar() {
         <View style={[styles.authorAvatar, pathname === '/account' ? styles.authorAvatarActive : {}]}>
           <Image
             source={
+              //@ts-ignore
               userInfo
                 ? // @ts-ignore
                   userInfo?.current_avatar.url
-                : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'
+                : EXPO_PUBLIC_DEFAULT_AVATAR
             }
             style={{ width: '100%', height: '100%' }}
           />

@@ -1,10 +1,9 @@
-import { useMyAuth } from '@/hooks'
-import { Feather, MaterialCommunityIcons, Octicons, SimpleLineIcons } from '@expo/vector-icons'
+import { useUserStateContext } from '@/contexts'
+import { MaterialCommunityIcons, Octicons, SimpleLineIcons } from '@expo/vector-icons'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function AccountScreenHeader() {
-  const { removeUserInfo } = useMyAuth()
-
+  const { signOut } = useUserStateContext()
   return (
     <View style={styles.container}>
       <View style={styles.headerLeft}>
@@ -18,7 +17,7 @@ export default function AccountScreenHeader() {
       <View style={styles.headerRight}>
         <TouchableOpacity
           style={[styles.btnAction]}
-          onPress={removeUserInfo}
+          onPress={signOut}
         >
           <Octicons
             name="diff-added"

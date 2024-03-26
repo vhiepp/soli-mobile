@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -35,6 +37,12 @@
         {
           "fonts": []
         }
+      ],
+      [
+        "expo-secure-store",
+        {
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
+        }
       ]
     ],
     "experiments": {
@@ -45,7 +53,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "8082125b-254d-4df1-9eeb-50f24c698c1c"
+        "projectId": "66233283-3c9e-4069-a16a-96f861beb176"
       }
     }
   }

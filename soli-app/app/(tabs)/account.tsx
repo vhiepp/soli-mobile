@@ -3,6 +3,7 @@ import { AccountScreenHeader } from '@/components/header'
 import { RefreshSpinner } from '@/components/spinner'
 import { UserBoxInfo } from '@/components/user'
 import { useUserStateContext } from '@/contexts'
+import { useAuthorization } from '@/hooks'
 import { useEffect, useState } from 'react'
 import { ScrollView, StatusBar, StyleSheet } from 'react-native'
 

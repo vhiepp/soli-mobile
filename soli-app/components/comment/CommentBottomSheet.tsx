@@ -2,10 +2,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Text, StyleSheet, Dimensions, View } from 'react-native'
 import { BottomSheetBackdropProps, BottomSheetModal } from '@gorhom/bottom-sheet'
 import { Line } from '../theme'
-import Animated, { interpolate, useAnimatedStyle, Extrapolate } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
+import { InputCommentBottomSheet } from './InputCommentBottomSheet'
 
 const { height } = Dimensions.get('window')
-const percentScreen = [0.75, 1]
+const percentScreen = [0.7, 1]
 
 export default function CommentBottomSheet(props: any) {
   const [currentPercentScreen, setCurrentPercentScreen] = useState(1)
@@ -44,6 +45,7 @@ export default function CommentBottomSheet(props: any) {
       onChange={handleSheetChanges}
       keyboardBehavior="fillParent"
       backdropComponent={CustomBackdrop}
+      footerComponent={InputCommentBottomSheet}
     >
       <View style={styles.contentContainer}>
         <Text style={styles.textTitle}>Bình luận</Text>

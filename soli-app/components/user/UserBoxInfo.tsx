@@ -1,7 +1,8 @@
-import { useUserStateContext } from '@/contexts'
 import { FontAwesome } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+
+const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
 
 export default function UserBoxInfo({ userInfo }: any) {
   return (
@@ -10,12 +11,12 @@ export default function UserBoxInfo({ userInfo }: any) {
         <View style={styles.boxLeft}>
           <View style={styles.authorAvatar}>
             <Image
-              source={{
-                uri: userInfo
+              source={
+                userInfo
                   ? // @ts-ignore
                     userInfo?.current_avatar.url
-                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU',
-              }}
+                  : EXPO_PUBLIC_DEFAULT_AVATAR
+              }
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
             <TouchableOpacity
@@ -34,10 +35,9 @@ export default function UserBoxInfo({ userInfo }: any) {
         <View style={styles.boxRight}>
           <View style={styles.boxInfo}>
             <Text style={styles.infoNumber}>
-              {
+              {userInfo &&
                 // @ts-ignore
-                userInfo?.post
-              }
+                userInfo?.post}
             </Text>
             <Text
               style={styles.infoDesc}
@@ -49,10 +49,9 @@ export default function UserBoxInfo({ userInfo }: any) {
           </View>
           <View style={styles.boxInfo}>
             <Text style={styles.infoNumber}>
-              {
+              {userInfo &&
                 // @ts-ignore
-                userInfo?.follower
-              }
+                userInfo?.follower}
             </Text>
             <Text
               style={styles.infoDesc}
@@ -64,10 +63,9 @@ export default function UserBoxInfo({ userInfo }: any) {
           </View>
           <View style={styles.boxInfo}>
             <Text style={styles.infoNumber}>
-              {
+              {userInfo &&
                 //@ts-ignore
-                userInfo.following
-              }
+                userInfo.following}
             </Text>
             <Text
               style={styles.infoDesc}

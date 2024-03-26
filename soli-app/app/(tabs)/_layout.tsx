@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Tabs } from 'expo-router'
 import { StyleSheet } from 'react-native'
 
@@ -6,8 +6,11 @@ import Colors from '@/constants/Colors'
 import { useColorScheme } from '@/components/useColorScheme'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 import { MainTabBar } from '@/components/tab-bar'
+import { useAuthorization } from '@/hooks'
 
 export default function TabLayout() {
+  useAuthorization()
+
   const colorScheme = useColorScheme()
 
   return (
