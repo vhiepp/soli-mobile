@@ -1,17 +1,16 @@
+import { useAuthApi } from '@/apis'
 import { ViewContent } from '@/components/Themed'
 import { AccountScreenHeader } from '@/components/header'
 import { RefreshSpinner } from '@/components/spinner'
 import { UserBoxInfo } from '@/components/user'
 import { useUserStateContext } from '@/contexts'
-import { useAuthorization } from '@/hooks'
 import { useEffect, useState } from 'react'
 import { ScrollView, StatusBar, StyleSheet } from 'react-native'
 
 export default function Account() {
   const [refreshing, setRefreshing] = useState(false)
-  const { userInfo } = useUserStateContext()
 
-  useEffect(() => {}, [])
+  const { userInfo } = useUserStateContext()
 
   const onRefresh = () => {
     // goi api
@@ -35,7 +34,12 @@ export default function Account() {
         }
       >
         <AccountScreenHeader />
-        <UserBoxInfo userInfo={userInfo} />
+        <UserBoxInfo
+          userUid={
+            // @ts-ignore
+            userInfo?.uid
+          }
+        />
       </ScrollView>
     </ViewContent>
   )

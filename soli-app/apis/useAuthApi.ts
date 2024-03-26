@@ -22,8 +22,17 @@ export const useAuthApi = () => {
     return null
   }
 
+  const getProfile = async () => {
+    try {
+      const { data } = await axiosClient.get(authApi.getProfile)
+      if (!data.error) return data.data
+    } catch (error) {}
+    return null
+  }
+
   return {
     signInWithEmaiPassword,
     signInWithOAuth,
+    getProfile,
   }
 }

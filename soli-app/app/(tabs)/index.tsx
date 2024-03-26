@@ -5,40 +5,34 @@ import { Post, PostSkeleton } from '@/components/post'
 import { HomeScreenHeader } from '@/components/header'
 import { StoryListBar } from '@/components/story'
 import { Line } from '@/components/theme'
-import { memo, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { RefreshSpinner } from '@/components/spinner'
 import { useUserStateContext } from '@/contexts'
-import axiosClient from '@/apis/axios-client'
+import { usePostApi } from '@/apis'
 
 export default function TabOneScreen() {
   const [refreshing, setRefreshing] = useState(false)
   const [onLoadMore, setOnLoadMore] = useState(false)
   const [isEndPostList, setIsEndPostList] = useState(false)
-
   const [postList, setPostList]: any = useState([])
   const [exceptPostList, setExceptPostList] = useState('[]')
-  const { accessToken, userInfo } = useUserStateContext()
+
+  const { userInfo } = useUserStateContext()
+  const { getPostListHomePageForYou } = usePostApi()
 
   const flatListRef = useRef(null)
 
   const handleGetPostList = async (excPostList = exceptPostList) => {
     if (!isEndPostList && userInfo) {
       console.log('get post list')
-      const { data } = await axiosClient.post(
-        'posts/for-you',
-        { except_posts: excPostList },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      )
+
+      const data = await getPostListHomePageForYou(exceptPostList)
+
       console.log('get post success')
-      if (data.data.posts.length === 0) setIsEndPostList(true)
+      if (data.posts.length === 0) setIsEndPostList(true)
       return {
-        posts: data.data.posts,
-        except_posts: data.data.except_posts,
+        posts: data.posts,
+        except_posts: data.except_posts,
       }
     }
     return {
@@ -50,7 +44,6 @@ export default function TabOneScreen() {
   const handleLoadMore = async () => {
     if (!onLoadMore && userInfo && !refreshing) {
       console.log('load more')
-
       setOnLoadMore(true)
       const { posts, except_posts } = await handleGetPostList()
       if (posts.length > 0) {

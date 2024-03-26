@@ -1,10 +1,26 @@
+import { useAuthApi, useUserApi } from '@/apis'
+import { useUserStateContext } from '@/contexts'
 import { FontAwesome } from '@expo/vector-icons'
 import { Image } from 'expo-image'
+import { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
 
-export default function UserBoxInfo({ userInfo }: any) {
+export default function UserBoxInfo({ userUid }: any) {
+  const [user, setUser]: any = useState()
+  const { getUserProfileWithUid } = useUserApi()
+  const { userInfo } = useUserStateContext()
+
+  const handleGetUserInfo = async () => {
+    const data = await getUserProfileWithUid(userUid)
+    setUser(data)
+  }
+
+  useEffect(() => {
+    handleGetUserInfo()
+  }, [userUid])
+
   return (
     <View style={styles.container}>
       <View style={styles.containerTop}>
@@ -12,32 +28,38 @@ export default function UserBoxInfo({ userInfo }: any) {
           <View style={styles.authorAvatar}>
             <Image
               source={
-                userInfo
+                user
                   ? // @ts-ignore
-                    userInfo?.current_avatar.url
+                    user?.profile.current_avatar.url
                   : EXPO_PUBLIC_DEFAULT_AVATAR
               }
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
-            <TouchableOpacity
-              style={styles.authorChangeAvatarIcon}
-              activeOpacity={0.9}
-            >
-              <View style={styles.bgOpacity}></View>
-              <FontAwesome
-                name="camera"
-                size={20}
-                color="#fff"
-              />
-            </TouchableOpacity>
+            {
+              // @ts-ignore
+              user && user.profile.uid === userInfo?.uid && (
+                <TouchableOpacity
+                  style={styles.authorChangeAvatarIcon}
+                  activeOpacity={0.9}
+                >
+                  <View style={styles.bgOpacity}></View>
+                  <FontAwesome
+                    name="camera"
+                    size={20}
+                    color="#fff"
+                  />
+                </TouchableOpacity>
+              )
+            }
           </View>
         </View>
         <View style={styles.boxRight}>
           <View style={styles.boxInfo}>
             <Text style={styles.infoNumber}>
-              {userInfo &&
-                // @ts-ignore
-                userInfo?.post}
+              {user
+                ? // @ts-ignore
+                  user?.posts.total_short
+                : 0}
             </Text>
             <Text
               style={styles.infoDesc}
@@ -49,9 +71,10 @@ export default function UserBoxInfo({ userInfo }: any) {
           </View>
           <View style={styles.boxInfo}>
             <Text style={styles.infoNumber}>
-              {userInfo &&
-                // @ts-ignore
-                userInfo?.follower}
+              {user
+                ? // @ts-ignore
+                  user?.followers.total_short
+                : 0}
             </Text>
             <Text
               style={styles.infoDesc}
@@ -63,9 +86,10 @@ export default function UserBoxInfo({ userInfo }: any) {
           </View>
           <View style={styles.boxInfo}>
             <Text style={styles.infoNumber}>
-              {userInfo &&
-                //@ts-ignore
-                userInfo.following}
+              {user
+                ? //@ts-ignore
+                  user.following.total_short
+                : 0}
             </Text>
             <Text
               style={styles.infoDesc}
@@ -80,7 +104,7 @@ export default function UserBoxInfo({ userInfo }: any) {
       <Text style={styles.authorName}>
         {
           // @ts-ignore
-          userInfo?.firstname
+          user?.profile.firstname
         }
       </Text>
     </View>
