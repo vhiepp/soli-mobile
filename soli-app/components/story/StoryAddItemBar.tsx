@@ -1,8 +1,13 @@
+import { useUserStateContext } from '@/contexts'
 import { Ionicons } from '@expo/vector-icons'
-import { Image, StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native'
+import { Image } from 'expo-image'
+import { StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native'
+
+const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
 
 export default function StoryAddItemBar(props: ViewProps) {
   const { style, ...ortherProps } = props
+  const { userInfo } = useUserStateContext()
   return (
     <View
       style={[styles.container, style]}
@@ -10,7 +15,11 @@ export default function StoryAddItemBar(props: ViewProps) {
     >
       <TouchableOpacity style={styles.contentImageAuthor}>
         <Image
-          source={require('../../assets/images/avatar-default.png')}
+          // @ts-ignore
+          source={
+            // @ts-ignore
+            userInfo ? userInfo.current_avatar.url : EXPO_PUBLIC_DEFAULT_AVATAR
+          }
           style={styles.imageAuthor}
         />
         <Ionicons

@@ -1,43 +1,42 @@
 import { useEffect } from 'react'
 import { useAuth, useUser } from '@clerk/clerk-expo'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
-import { useMyAuth } from '@/hooks'
 import { useRouter } from 'expo-router'
 import { useUserStateContext } from '@/contexts'
-import axiosClient from '@/apis/axios-client'
+import { useStorageAuth } from '@/hooks'
+import { useAuthApi } from '@/apis'
 
 const Page = () => {
   const { user } = useUser()
   const { signOut } = useAuth()
-  const { saveUserInfo, saveToken } = useMyAuth()
+  const { saveUserInfo, saveToken } = useStorageAuth()
   const router = useRouter()
   const { refreshUserInfo } = useUserStateContext()
+  const { signInWithOAuth } = useAuthApi()
 
   useEffect(() => {
     async function checkSignIn() {
       if (user) {
-        const post = {
-          sign_in_provider: 'social-sign-in',
-          provider_id: user.id,
-          email: user.emailAddresses.toString(),
-          full_name: user.fullName,
-          firstname: user.firstName,
-          lastname: user.lastName,
-          avatar_url: user.imageUrl,
-        }
-        signOut()
-
-        const { data } = await axiosClient.post('auth/sign-in-with-oauth', post)
-
-        if (!data.error) {
-          saveToken(data.data.access_token)
-          await saveUserInfo(data.data.profile)
-          router.dismissAll()
-          refreshUserInfo()
-          router.replace('/(tabs)/')
-        } else {
-        }
-      } else {
+        try {
+          const data = await signInWithOAuth({
+            sign_in_provider: 'social-sign-in',
+            provider_id: user.id,
+            email: user.emailAddresses.toString(),
+            full_name: user.fullName,
+            firstname: user.firstName,
+            lastname: user.lastName,
+            avatar_url: user.imageUrl,
+          })
+          signOut()
+          if (data) {
+            saveToken(data.access_token)
+            await saveUserInfo(data.profile)
+            if (router.canDismiss()) router.dismissAll()
+            router.replace('/(tabs)/')
+            refreshUserInfo()
+            return
+          }
+        } catch (err) {}
       }
     }
     checkSignIn()

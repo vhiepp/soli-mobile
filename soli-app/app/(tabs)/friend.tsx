@@ -3,6 +3,7 @@ import { FriendRequestList } from '@/components/friend'
 import { FriendScreenHeader } from '@/components/header'
 import { RefreshSpinner } from '@/components/spinner'
 import { Line } from '@/components/theme'
+import { useAuthorization } from '@/hooks'
 import { useState } from 'react'
 import { ScrollView, StatusBar, StyleSheet } from 'react-native'
 

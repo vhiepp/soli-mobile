@@ -1,4 +1,4 @@
-import { Dimensions, Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Image } from 'expo-image'
 import { AntDesign, Entypo, FontAwesome6, Ionicons } from '@expo/vector-icons'
 import { CommentBottomSheet } from '../comment'
@@ -8,7 +8,6 @@ const widthScreen = Dimensions.get('window').width
 
 const Post = ({ post }: any) => {
   const [openCommentModal, setOpenCommentModal] = useState(false)
-  const [imageHeight, setImageHeight] = useState(520)
   const handleOpenModalComment = () => {
     setOpenCommentModal(true)
   }
@@ -21,7 +20,6 @@ const Post = ({ post }: any) => {
       console.error('Error sharing:', error)
     }
   }
-
   return (
     <View style={styles.container}>
       {openCommentModal && (
@@ -70,21 +68,24 @@ const Post = ({ post }: any) => {
         <Image
           source={post?.media[0].file_url}
           style={[styles.postImage, { height: 520 }]}
-          onLoad={(e) => {
-            // const { width, height } = e.source
-            // const persent = (width - widthScreen) / width
-            // setImageHeight(height - persent * height)
-          }}
         />
       </View>
       <View style={styles.footer}>
         <View style={styles.footerLeft}>
           <View style={styles.footerLeftIcon}>
             <TouchableOpacity>
-              <Ionicons
-                name="heart-outline"
-                size={30}
-              />
+              {post.is_heart ? (
+                <Ionicons
+                  name="heart-sharp"
+                  size={30}
+                  color="red"
+                />
+              ) : (
+                <Ionicons
+                  name="heart-outline"
+                  size={30}
+                />
+              )}
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOpenModalComment}>
               <AntDesign
@@ -99,7 +100,7 @@ const Post = ({ post }: any) => {
               />
             </TouchableOpacity>
           </View>
-          <Text style={styles.textCountHeart}>344 lượt thích</Text>
+          <Text style={styles.textCountHeart}>{post.heart.total_short} lượt thích</Text>
         </View>
         <View style={styles.footerRight}>{/* thêm sau */}</View>
       </View>

@@ -1,15 +1,16 @@
 import { TextInputCustom } from '@/components/form'
 import { Line } from '@/components/theme'
-import { useMyAuth, useWarmUpBrowser } from '@/hooks'
 import { useOAuth } from '@clerk/clerk-expo'
 import { AntDesign } from '@expo/vector-icons'
 import { ImageBackground } from 'expo-image'
 import { Link, useRouter } from 'expo-router'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import * as WebBrowser from 'expo-web-browser'
 import axiosClient from '@/apis/axios-client'
 import { useUserStateContext } from '@/contexts'
+import { useStorageAuth } from '@/hooks'
+import { useAuthApi } from '@/apis'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -20,29 +21,33 @@ const SOCIAL_OAUTH = {
 }
 
 export default function SignInScreen() {
-  const OAuth = {
-    oauth_google: useOAuth({ strategy: 'oauth_google' }),
-    // oauth_github: useOAuth({ strategy: 'oauth_github' }),
-    // oauth_facebook: useOAuth({ strategy: 'oauth_facebook' }),
-  }
-
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { saveUserInfo, saveToken } = useMyAuth()
+  const { saveUserInfo, saveToken } = useStorageAuth()
   const { refreshUserInfo } = useUserStateContext()
   const router = useRouter()
 
-  useWarmUpBrowser()
+  const { signInWithEmaiPassword } = useAuthApi()
+
+  const OAuth = {
+    oauth_google: useOAuth({ strategy: 'oauth_google' }),
+  }
+
+  useEffect(() => {
+    WebBrowser.warmUpAsync().then((e) => {
+      console.log(e)
+    })
+    return () => {
+      void WebBrowser.coolDownAsync()
+    }
+  }, [])
 
   const handleSignInWithPassword = async () => {
     if (email.length > 0 && password.length > 0) {
-      const { data } = await axiosClient.post('auth/sign-in', { email, password })
-      // console.log(data.data.profile.current_avatar.url)
-      console.log(data)
-
-      if (!data.error) {
-        saveToken(data.data.access_token)
-        await saveUserInfo(data.data.profile)
+      const data = await signInWithEmaiPassword(email, password)
+      if (data) {
+        await saveToken(data.access_token)
+        await saveUserInfo(data.profile)
         router.dismissAll()
         refreshUserInfo()
         router.replace('/(tabs)/')
@@ -50,7 +55,8 @@ export default function SignInScreen() {
     }
   }
 
-  const signInWithOAuth = useCallback(async (socialOAuth: string) => {
+  const signInWithOAuth = async (socialOAuth: string) => {
+    console.log('sign in with google')
     try {
       // @ts-ignore
       const { createdSessionId, setActive } = await OAuth[socialOAuth].startOAuthFlow()
@@ -58,15 +64,12 @@ export default function SignInScreen() {
       if (createdSessionId) {
         await setActive!({ session: createdSessionId })
       } else {
+        console.log('createdSessionId null')
       }
     } catch (err) {
       console.log(err)
     }
-  }, [])
-
-  useEffect(() => {
-    console.log(process.env.EXPO_PUBLIC_SERVER_DOMAIN)
-  }, [])
+  }
 
   return (
     <ImageBackground

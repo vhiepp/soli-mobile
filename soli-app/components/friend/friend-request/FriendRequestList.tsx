@@ -54,6 +54,6 @@ const styles = StyleSheet.create({
   textSeeAll: {
     color: '#0681ee',
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: '500',
   },
 })

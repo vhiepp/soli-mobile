@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store'
 const TOKEN_SECURE_KEY = 'token_secure_key'
 const USER_SECURE_KEY = 'user_secure_key'
 
-const useMyAuth = () => {
+const useStorageAuth = () => {
   async function getToken() {
     try {
       return await SecureStore.getItemAsync(TOKEN_SECURE_KEY)
@@ -59,4 +59,4 @@ const useMyAuth = () => {
   return { getToken, saveToken, removeToken, getUserInfo, saveUserInfo, removeUserInfo }
 }
 
-export default useMyAuth
+export default useStorageAuth
