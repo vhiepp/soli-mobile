@@ -11,5 +11,13 @@ export const usePostApi = () => {
     } catch (error) {}
     return null
   }
-  return { getPostListHomePageForYou }
+
+  const heartChangeForPostId = async (postId: string) => {
+    try {
+      const { data } = await axiosClient.post(`posts/${postId}/hearts`)
+      if (!data.error) return true
+    } catch (error) {}
+    return false
+  }
+  return { getPostListHomePageForYou, heartChangeForPostId }
 }

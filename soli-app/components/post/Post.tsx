@@ -1,16 +1,31 @@
-import { Dimensions, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Image } from 'expo-image'
-import { AntDesign, Entypo, FontAwesome6, Ionicons } from '@expo/vector-icons'
+import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import { CommentBottomSheet } from '../comment'
 import { useState } from 'react'
+import { usePostApi } from '@/apis'
 
-const widthScreen = Dimensions.get('window').width
+const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
 
 const Post = ({ post }: any) => {
   const [openCommentModal, setOpenCommentModal] = useState(false)
+  const [heartStatus, setHeartStatus]: any = useState({ is_heart: post.is_heart, total: post.heart.total })
+
+  const { heartChangeForPostId } = usePostApi()
   const handleOpenModalComment = () => {
     setOpenCommentModal(true)
   }
+
+  const handleChangeHeartStatus = () => {
+    heartChangeForPostId(post.id)
+    setHeartStatus((prev: any) => {
+      return {
+        is_heart: !prev.is_heart,
+        total: prev.is_heart ? prev.total - 1 : prev.total + 1,
+      }
+    })
+  }
+
   const handleSharePost = async () => {
     try {
       await Share.share({
@@ -20,6 +35,7 @@ const Post = ({ post }: any) => {
       console.error('Error sharing:', error)
     }
   }
+
   return (
     <View style={styles.container}>
       {openCommentModal && (
@@ -32,11 +48,7 @@ const Post = ({ post }: any) => {
         <View style={styles.headerLeft}>
           <View style={styles.authorAvatar}>
             <Image
-              source={
-                post?.author.current_avatar.url
-                  ? post?.author.current_avatar.url
-                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'
-              }
+              source={post?.author.current_avatar.url ? post?.author.current_avatar.url : EXPO_PUBLIC_DEFAULT_AVATAR}
               style={{ width: '100%', height: '100%' }}
             />
           </View>
@@ -73,8 +85,8 @@ const Post = ({ post }: any) => {
       <View style={styles.footer}>
         <View style={styles.footerLeft}>
           <View style={styles.footerLeftIcon}>
-            <TouchableOpacity>
-              {post.is_heart ? (
+            <TouchableOpacity onPress={handleChangeHeartStatus}>
+              {heartStatus.is_heart ? (
                 <Ionicons
                   name="heart-sharp"
                   size={30}
@@ -100,7 +112,7 @@ const Post = ({ post }: any) => {
               />
             </TouchableOpacity>
           </View>
-          <Text style={styles.textCountHeart}>{post.heart.total_short} lượt thích</Text>
+          <Text style={styles.textCountHeart}>{heartStatus.total} lượt thích</Text>
         </View>
         <View style={styles.footerRight}>{/* thêm sau */}</View>
       </View>

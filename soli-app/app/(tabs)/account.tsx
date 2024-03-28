@@ -7,7 +7,7 @@ import { UserBoxInfo, UserExplore } from '@/components/user'
 import { useUserStateContext } from '@/contexts'
 import { Ionicons } from '@expo/vector-icons'
 import { useState } from 'react'
-import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function Account() {
   const [refreshing, setRefreshing] = useState(false)
@@ -17,59 +17,63 @@ export default function Account() {
   const onRefresh = () => {
     // goi api
     setRefreshing(true)
-
     // Thực hiện các thao tác tải lại dữ liệu ở đây
     setTimeout(() => {
       setRefreshing(false) // khi hoan thanh
-    }, 1500) // Giả định rằng việc tải lại mất khoảng 2 giây
+    }, 1500)
   }
 
   return (
     <ViewContent style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+      <FlatList
+        data={[]}
+        renderItem={() => <View></View>}
         refreshControl={
           <RefreshSpinner
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
         }
-      >
-        <AccountScreenHeader />
-        <UserBoxInfo
-          userUid={
-            // @ts-ignore
-            userInfo?.uid
-          }
-        />
-        <View style={styles.boxBtnAction}>
-          <TouchableOpacity style={[styles.btnAction, { flex: 1 }]}>
-            <Text
-              style={{ fontWeight: '600' }}
-              numberOfLines={1}
-            >
-              Chỉnh sửa trang cá nhân
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.btnAction, { flex: 1 }]}>
-            <Text
-              style={{ fontWeight: '600', color: '#000' }}
-              numberOfLines={1}
-            >
-              Chia sẻ trang cá nhân
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.btnAction, { padding: 6 }]}>
-            <Ionicons
-              name="person-add-sharp"
-              size={20}
-              color="black"
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        ListHeaderComponent={
+          <>
+            <AccountScreenHeader />
+            <UserBoxInfo
+              userUid={
+                // @ts-ignore
+                userInfo?.uid
+              }
             />
-          </TouchableOpacity>
-        </View>
-        <UserExplore />
-        <PostListForUser />
-      </ScrollView>
+            <View style={styles.boxBtnAction}>
+              <TouchableOpacity style={[styles.btnAction, { flex: 1 }]}>
+                <Text
+                  style={{ fontWeight: '600' }}
+                  numberOfLines={1}
+                >
+                  Chỉnh sửa trang cá nhân
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.btnAction, { flex: 1 }]}>
+                <Text
+                  style={{ fontWeight: '600', color: '#000' }}
+                  numberOfLines={1}
+                >
+                  Chia sẻ trang cá nhân
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.btnAction, { padding: 6 }]}>
+                <Ionicons
+                  name="person-add-sharp"
+                  size={20}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
+            <UserExplore />
+          </>
+        }
+      />
     </ViewContent>
   )
 }

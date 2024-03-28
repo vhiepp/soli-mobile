@@ -35,7 +35,7 @@ export const InputCommentBottomSheet = ({ animatedFooterPosition }: CustomFooter
           <Ionicons
             name="send"
             size={24}
-            color="black"
+            color="#0681ee"
           />
         </TouchableOpacity>
       </View>
@@ -47,9 +47,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     paddingHorizontal: 14,
+    paddingVertical: 10,
     paddingBottom: 8,
     gap: 10,
     alignItems: 'center',
+    backgroundColor: '#fff',
   },
   authorAvatar: {
     width: 35,

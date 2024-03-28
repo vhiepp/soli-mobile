@@ -8,7 +8,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { useEffect, useState } from 'react'
 
 import { useColorScheme } from '@/components/useColorScheme'
-import { TouchableOpacity } from 'react-native'
+import { SafeAreaView, StatusBar, TouchableOpacity } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { ClerkProvider } from '@clerk/clerk-expo'
 

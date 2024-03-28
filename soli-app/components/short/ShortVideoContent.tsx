@@ -3,6 +3,7 @@ import { ResizeMode, Video } from 'expo-av'
 import { useEffect, useRef, useState } from 'react'
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
+import { CommentBottomSheet } from '../comment'
 
 export default function ShortVideoContent(props: any) {
   const { play, videoUrl, isMuted, onChangeStatusMuted } = props
@@ -11,6 +12,11 @@ export default function ShortVideoContent(props: any) {
   const [onloaded, setOnloaded] = useState(false)
   const [isUserPauseVideo, setIsUserPauseVideo] = useState(false)
   const [videoSize, setVideoSize] = useState({ width: 1, height: 1 })
+  const [openCommentModal, setOpenCommentModal] = useState(false)
+
+  const handleOpenModalComment = () => {
+    setOpenCommentModal(true)
+  }
 
   const handleLoadError = (e: any) => {
     console.log('load err', e)
@@ -75,6 +81,12 @@ export default function ShortVideoContent(props: any) {
 
   return (
     <View style={styles.container}>
+      {openCommentModal && (
+        <CommentBottomSheet
+          openModal={true}
+          onModalClose={() => setOpenCommentModal(false)}
+        />
+      )}
       <View style={[styles.videoContent, { zIndex: 1 }]}>
         <Video
           ref={video}
@@ -158,7 +170,7 @@ export default function ShortVideoContent(props: any) {
             <Text style={{ color: '#fff', fontSize: 12 }}>4,7 triệu</Text>
           </View>
           <View style={[styles.center]}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleOpenModalComment}>
               <AntDesign
                 name="message1"
                 size={28}
