@@ -1,11 +1,13 @@
 import { useAuthApi } from '@/apis'
 import { ViewContent } from '@/components/Themed'
 import { AccountScreenHeader } from '@/components/header'
+import { PostListForUser } from '@/components/post/post-for-user'
 import { RefreshSpinner } from '@/components/spinner'
-import { UserBoxInfo } from '@/components/user'
+import { UserBoxInfo, UserExplore } from '@/components/user'
 import { useUserStateContext } from '@/contexts'
-import { useEffect, useState } from 'react'
-import { ScrollView, StatusBar, StyleSheet } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
+import { useState } from 'react'
+import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function Account() {
   const [refreshing, setRefreshing] = useState(false)
@@ -40,6 +42,33 @@ export default function Account() {
             userInfo?.uid
           }
         />
+        <View style={styles.boxBtnAction}>
+          <TouchableOpacity style={[styles.btnAction, { flex: 1 }]}>
+            <Text
+              style={{ fontWeight: '600' }}
+              numberOfLines={1}
+            >
+              Chỉnh sửa trang cá nhân
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.btnAction, { flex: 1 }]}>
+            <Text
+              style={{ fontWeight: '600', color: '#000' }}
+              numberOfLines={1}
+            >
+              Chia sẻ trang cá nhân
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.btnAction, { padding: 6 }]}>
+            <Ionicons
+              name="person-add-sharp"
+              size={20}
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
+        <UserExplore />
+        <PostListForUser />
       </ScrollView>
     </ViewContent>
   )
@@ -49,5 +78,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
+  },
+  boxBtnAction: {
+    flexDirection: 'row',
+    paddingHorizontal: 14,
+    gap: 6,
+    maxWidth: '100%',
+    justifyContent: 'space-between',
+  },
+  btnAction: {
+    backgroundColor: '#ebebeb',
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 6,
   },
 })
