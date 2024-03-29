@@ -5,28 +5,62 @@ import { Post, PostSkeleton } from '@/components/post'
 import { HomeScreenHeader } from '@/components/header'
 import { StoryListBar } from '@/components/story'
 import { Line } from '@/components/theme'
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { RefreshSpinner } from '@/components/spinner'
 import { useUserStateContext } from '@/contexts'
 import { usePostApi } from '@/apis'
 
 export default function TabOneScreen() {
-  const [refreshing, setRefreshing] = useState(false)
-  const [onLoadMore, setOnLoadMore] = useState(false)
-  const [isEndPostList, setIsEndPostList] = useState(false)
-  const [postList, setPostList]: any = useState([])
-  const [exceptPostList, setExceptPostList] = useState('[]')
+  // const [refreshing, setRefreshing] = useState(false)
+  // const [onLoadMore, setOnLoadMore] = useState(false)
+  // const [isEndPostList, setIsEndPostList] = useState(false)
+  // const [postList, setPostList]: any = useState([])
+  // const [exceptPostList, setExceptPostList] = useState('[]')
+
+  const [state, setState] = useState({
+    refreshing: false,
+    onLoadMore: false,
+    isEndPostList: false,
+    postList: [],
+    exceptPostList: '[]',
+  })
+
+  const setMultipleState = (value: any) => {
+    setState((prev) => ({ ...prev, ...value }))
+  }
+
+  const setRefreshing = (value: true | false) => {
+    setState((prev) => ({ ...prev, refreshing: value }))
+  }
+
+  const setOnLoadMore = (value: true | false) => {
+    setState((prev) => ({ ...prev, onLoadMore: value }))
+  }
+
+  const setIsEndPostList = (value: true | false) => {
+    setState((prev) => ({ ...prev, isEndPostList: value }))
+  }
+
+  const setPostList = (value: any) => {
+    setState((prev) => ({ ...state, postList: value }))
+  }
+
+  const setExceptPostList = (value: string) => {
+    setState((prev) => ({ ...state, exceptPostList: value }))
+  }
+
+  console.log('home re render')
 
   const { userInfo } = useUserStateContext()
   const { getPostListHomePageForYou } = usePostApi()
 
   const flatListRef = useRef(null)
 
-  const handleGetPostList = async (excPostList = exceptPostList) => {
-    if (!isEndPostList && userInfo) {
+  const handleGetPostList = async (excPostList = state.exceptPostList) => {
+    if (!state.isEndPostList && userInfo) {
       console.log('get post list')
 
-      const data = await getPostListHomePageForYou(exceptPostList)
+      const data = await getPostListHomePageForYou(state.exceptPostList)
 
       console.log('get post success')
       if (data.posts.length === 0) setIsEndPostList(true)
@@ -42,42 +76,46 @@ export default function TabOneScreen() {
   }
 
   const handleLoadMore = async () => {
-    if (!onLoadMore && userInfo && !refreshing) {
+    if (!state.onLoadMore && userInfo && !state.refreshing) {
       console.log('load more')
       setOnLoadMore(true)
+
       const { posts, except_posts } = await handleGetPostList()
-      if (posts.length > 0) {
-        // @ts-ignore
-        setPostList((prev) => [...prev, ...posts])
-        setExceptPostList(except_posts)
-      }
-      setOnLoadMore(false)
+      setMultipleState({
+        postList: [...state.postList, ...posts],
+        exceptPostList: except_posts,
+        onLoadMore: false,
+      })
     }
   }
 
   const onRefresh = async () => {
-    if (!refreshing && userInfo) {
+    if (!state.refreshing && userInfo) {
       console.log('refresh')
 
       setRefreshing(true)
+
       const { posts, except_posts } = await handleGetPostList('[]')
-      setExceptPostList(except_posts)
-      setPostList(posts)
-      setRefreshing(false)
-      if (isEndPostList) setIsEndPostList(false)
+      setMultipleState({
+        exceptPostList: except_posts,
+        postList: posts,
+        refreshing: false,
+        isEndPostList: false,
+      })
     }
   }
 
   useEffect(() => {
-    if (flatListRef.current) {
-      // @ts-ignore
-      flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
-    }
-    if (!userInfo) {
+    if (!userInfo && state.postList.length > 0) {
       console.log('no')
-
-      setPostList([])
-      setExceptPostList('[]')
+      setMultipleState({
+        postList: [],
+        exceptPostList: '[]',
+      })
+      if (flatListRef.current) {
+        // @ts-ignore
+        flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
+      }
     } else {
       onRefresh()
     }
@@ -95,9 +133,9 @@ export default function TabOneScreen() {
           </>
         }
         ListFooterComponent={() => {
-          return <>{!isEndPostList && <PostSkeleton />}</>
+          return <>{!state.isEndPostList && <PostSkeleton />}</>
         }}
-        data={postList}
+        data={state.postList}
         renderItem={PostRenderItem}
         keyExtractor={(item, index) => index.toString()}
         onEndReachedThreshold={1}
@@ -106,7 +144,7 @@ export default function TabOneScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshSpinner
-            refreshing={refreshing}
+            refreshing={state.refreshing}
             onRefresh={onRefresh}
           />
         }

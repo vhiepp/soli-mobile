@@ -1,16 +1,27 @@
 import { useUserStateContext } from '@/contexts'
 import { Ionicons } from '@expo/vector-icons'
-import { BottomSheetFooter, BottomSheetFooterProps, useBottomSheet } from '@gorhom/bottom-sheet'
+import { BottomSheetFooter, BottomSheetFooterProps } from '@gorhom/bottom-sheet'
 import { Image } from 'expo-image'
 import { View } from 'moti'
+import { useState } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-interface CustomFooterProps extends BottomSheetFooterProps {}
+interface InputCommentBottomSheetFooterProps extends BottomSheetFooterProps {
+  // onSendComment: any
+}
 
-export const InputCommentBottomSheet = ({ animatedFooterPosition }: CustomFooterProps) => {
+export const InputCommentBottomSheet = ({
+  animatedFooterPosition,
+}: // onSendComment,
+InputCommentBottomSheetFooterProps) => {
   const { userInfo } = useUserStateContext()
   const { bottom: bottomSafeArea } = useSafeAreaInsets()
+  const [content, setContent] = useState('')
+
+  const handlePressBtnSend = () => {
+    // onSendComment(content)
+  }
 
   return (
     <BottomSheetFooter
@@ -28,10 +39,14 @@ export const InputCommentBottomSheet = ({ animatedFooterPosition }: CustomFooter
           />
         </View>
         <TextInput
+          onChangeText={(text) => {
+            console.log('chang text')
+            setContent(text)
+          }}
           placeholder="Hãy bình luận gì đó"
           style={styles.textInput}
         />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handlePressBtnSend}>
           <Ionicons
             name="send"
             size={24}

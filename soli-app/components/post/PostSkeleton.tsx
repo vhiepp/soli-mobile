@@ -20,10 +20,6 @@ export function PostSkeleton() {
               show
               width={'100%'}
               height={'100%'}
-              // transition={{
-              //   type: 'timing',
-              //   duration: 2000,
-              // }}
               {...SkeletonCommonProps}
             ></Skeleton>
           </View>

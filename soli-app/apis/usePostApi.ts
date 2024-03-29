@@ -19,5 +19,22 @@ export const usePostApi = () => {
     } catch (error) {}
     return false
   }
-  return { getPostListHomePageForYou, heartChangeForPostId }
+
+  const getCommentListForPostId = async (postId: string, page: number) => {
+    try {
+      if (!page) page = 1
+      const { data } = await axiosClient.get(`posts/${postId}/comments`, { params: { page } })
+      if (!data.error) return data.data
+    } catch (error) {}
+    return null
+  }
+
+  const commentForPostId = async (postId: string, content: string) => {
+    try {
+      const { data } = await axiosClient.post(`posts/${postId}/comments`, { content })
+      if (!data.error) return data.data
+    } catch (error) {}
+    return null
+  }
+  return { getPostListHomePageForYou, heartChangeForPostId, getCommentListForPostId, commentForPostId }
 }

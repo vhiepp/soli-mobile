@@ -2,7 +2,7 @@ import { Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Image } from 'expo-image'
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import { CommentBottomSheet } from '../comment'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { usePostApi } from '@/apis'
 
 const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
@@ -11,7 +11,10 @@ const Post = ({ post }: any) => {
   const [openCommentModal, setOpenCommentModal] = useState(false)
   const [heartStatus, setHeartStatus]: any = useState({ is_heart: post.is_heart, total: post.heart.total })
 
+  console.log('post render ', post.id)
+
   const { heartChangeForPostId } = usePostApi()
+
   const handleOpenModalComment = () => {
     setOpenCommentModal(true)
   }
@@ -41,7 +44,10 @@ const Post = ({ post }: any) => {
       {openCommentModal && (
         <CommentBottomSheet
           openModal={true}
-          onModalClose={() => setOpenCommentModal(false)}
+          onModalClose={() => {
+            setOpenCommentModal(false)
+          }}
+          postId={post.id}
         />
       )}
       <View style={styles.header}>
@@ -218,6 +224,7 @@ const styles = StyleSheet.create({
   textCountHeart: {
     color: '#000',
     fontSize: 14,
+    marginLeft: 4,
   },
   footerRight: {
     display: 'flex',
@@ -227,4 +234,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Post
+export default memo(Post)

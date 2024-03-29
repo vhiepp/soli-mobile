@@ -1,2 +1,2 @@
 export { default as CommentBottomSheet } from './CommentBottomSheet'
-export * from './CommentItem'
+export { default as CommentItem } from './CommentItem'

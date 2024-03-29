@@ -33,6 +33,7 @@
     "expo-status-bar": "~1.11.1",
     "expo-system-ui": "~2.9.3",
     "expo-web-browser": "~12.8.2",
+    "moment": "^2.30.1",
     "moti": "^0.28.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
