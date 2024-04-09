@@ -1,33 +1,43 @@
 import { Image } from 'expo-image'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { memo } from 'react'
+import { StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native'
 
-export default function FriendRequestItem() {
+const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
+
+function FriendRequestItem({ user }: any) {
+  console.log('render friend request item', user.uid)
+
   return (
-    <View style={styles.container}>
-      <View style={styles.authorAvatar}>
-        <Image
-          source={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQIxLGhYK3eAm_vWoR3A1l8Iq6_z_-ECWdoQ&usqp=CAU'}
-          style={{ width: '100%', height: '100%' }}
-        />
+    <TouchableNativeFeedback
+      // @ts-ignore
+      background={TouchableNativeFeedback.Ripple('#ededed')}
+    >
+      <View style={styles.container}>
+        <View style={styles.authorAvatar}>
+          <Image
+            source={user ? user.current_avatar.url : EXPO_PUBLIC_DEFAULT_AVATAR}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </View>
+        <View style={{ justifyContent: 'flex-start', flex: 1 }}>
+          <View style={styles.boxAuthorName}>
+            <Text style={styles.authorName}>{user.full_name}</Text>
+            <Text style={styles.textDate}>4 tuần</Text>
+          </View>
+          <View style={{ marginBottom: 12 }}>
+            <Text>{user.uid}</Text>
+          </View>
+          <View style={styles.boxBtn}>
+            <TouchableOpacity style={[styles.btn, styles.btnPrimary]}>
+              <Text style={[styles.textBtn, styles.textBtnPrimary]}>Chấp nhận</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.btn]}>
+              <Text style={[styles.textBtn]}>Xóa</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-      <View style={{ justifyContent: 'flex-start', flex: 1 }}>
-        <View style={styles.boxAuthorName}>
-          <Text style={styles.authorName}>Văn Hiệp</Text>
-          <Text style={styles.textDate}>4 tuần</Text>
-        </View>
-        <View style={{ marginBottom: 12 }}>
-          <Text>_vhiep</Text>
-        </View>
-        <View style={styles.boxBtn}>
-          <TouchableOpacity style={[styles.btn, styles.btnPrimary]}>
-            <Text style={[styles.textBtn, styles.textBtnPrimary]}>Chấp nhận</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.btn]}>
-            <Text style={[styles.textBtn]}>Xóa</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+    </TouchableNativeFeedback>
   )
 }
 
@@ -37,6 +47,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
+    paddingHorizontal: 14,
     gap: 12,
   },
   authorAvatar: {
@@ -84,3 +95,5 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 })
+
+export default memo(FriendRequestItem)

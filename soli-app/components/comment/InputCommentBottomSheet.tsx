@@ -1,27 +1,28 @@
-import { useUserStateContext } from '@/contexts'
-import { Ionicons } from '@expo/vector-icons'
 import { BottomSheetFooter, BottomSheetFooterProps } from '@gorhom/bottom-sheet'
-import { Image } from 'expo-image'
-import { View } from 'moti'
-import { useState } from 'react'
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import React, { memo, useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image } from 'expo-image'
+import { Ionicons } from '@expo/vector-icons'
+import { useUserStateContext } from '@/contexts'
+
+const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
 
 interface InputCommentBottomSheetFooterProps extends BottomSheetFooterProps {
-  // onSendComment: any
+  onSendComment: any
 }
 
-export const InputCommentBottomSheet = ({
-  animatedFooterPosition,
-}: // onSendComment,
-InputCommentBottomSheetFooterProps) => {
-  const { userInfo } = useUserStateContext()
+const InputCommentBottomSheet = ({ animatedFooterPosition, onSendComment }: InputCommentBottomSheetFooterProps) => {
   const { bottom: bottomSafeArea } = useSafeAreaInsets()
   const [content, setContent] = useState('')
-
+  const { userInfo } = useUserStateContext()
   const handlePressBtnSend = () => {
-    // onSendComment(content)
+    onSendComment(content)
   }
+
+  useEffect(() => {
+    console.log('render InputCommentBottomSheet')
+  }, [])
 
   return (
     <BottomSheetFooter
@@ -32,17 +33,18 @@ InputCommentBottomSheetFooterProps) => {
         <View style={styles.authorAvatar}>
           <Image
             source={
-              // @ts-ignore
-              userInfo?.current_avatar.url
+              userInfo
+                ? // @ts-ignore
+                  userInfo?.current_avatar.url
+                : EXPO_PUBLIC_DEFAULT_AVATAR
             }
             style={{ width: '100%', height: '100%' }}
           />
         </View>
         <TextInput
-          onChangeText={(text) => {
-            console.log('chang text')
-            setContent(text)
-          }}
+          multiline
+          defaultValue=""
+          onChangeText={(text) => setContent(text)}
           placeholder="Hãy bình luận gì đó"
           style={styles.textInput}
         />
@@ -79,3 +81,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 })
+
+export default memo(InputCommentBottomSheet)

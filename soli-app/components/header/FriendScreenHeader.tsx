@@ -1,8 +1,11 @@
 import { Octicons } from '@expo/vector-icons'
-import { Link } from 'expo-router'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useRouter } from 'expo-router'
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+
+const { width } = Dimensions.get('window')
 
 export default function FriendScreenHeader() {
+  const router = useRouter()
   return (
     <View style={styles.container}>
       <View style={styles.headerSearch}>
@@ -15,18 +18,26 @@ export default function FriendScreenHeader() {
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.headerBtnLink}>
-        <TouchableOpacity style={styles.btnLink}>
-          <Link href={'/yourfriend'}>
+      <ScrollView
+        style={styles.headerBtnLink}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+      >
+        <View style={{ flexDirection: 'row', minWidth: width, paddingHorizontal: 12, gap: 8 }}>
+          <TouchableOpacity
+            style={styles.btnLink}
+            onPress={() => router.push('/yourfriend')}
+          >
             <Text style={styles.textBtnLink}>Bạn bè</Text>
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btnLink}>
-          <Link href={'/following'}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btnLink}>
             <Text style={styles.textBtnLink}>Theo dõi</Text>
-          </Link>
-        </TouchableOpacity>
-      </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btnLink}>
+            <Text style={styles.textBtnLink}>Đang theo dõi</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </View>
   )
 }
@@ -55,11 +66,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#e8ebeb',
   },
   headerBtnLink: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 10,
     marginTop: 8,
-    paddingHorizontal: 12,
+    minWidth: width,
   },
   btnLink: {
     paddingHorizontal: 16,

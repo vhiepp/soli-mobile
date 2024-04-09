@@ -1,13 +1,11 @@
-import { useAuthApi } from '@/apis'
 import { ViewContent } from '@/components/Themed'
 import { AccountScreenHeader } from '@/components/header'
-import { PostListForUser } from '@/components/post/post-for-user'
 import { RefreshSpinner } from '@/components/spinner'
 import { UserBoxInfo, UserExplore } from '@/components/user'
 import { useUserStateContext } from '@/contexts'
 import { Ionicons } from '@expo/vector-icons'
 import { useState } from 'react'
-import { FlatList, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function Account() {
   const [refreshing, setRefreshing] = useState(false)

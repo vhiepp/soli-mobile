@@ -1,22 +1,15 @@
 import { FlatList, StatusBar, StyleSheet } from 'react-native'
-
 import { ViewContent } from '@/components/Themed'
 import { Post, PostSkeleton } from '@/components/post'
 import { HomeScreenHeader } from '@/components/header'
 import { StoryListBar } from '@/components/story'
 import { Line } from '@/components/theme'
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { RefreshSpinner } from '@/components/spinner'
 import { useUserStateContext } from '@/contexts'
 import { usePostApi } from '@/apis'
 
 export default function TabOneScreen() {
-  // const [refreshing, setRefreshing] = useState(false)
-  // const [onLoadMore, setOnLoadMore] = useState(false)
-  // const [isEndPostList, setIsEndPostList] = useState(false)
-  // const [postList, setPostList]: any = useState([])
-  // const [exceptPostList, setExceptPostList] = useState('[]')
-
   const [state, setState] = useState({
     refreshing: false,
     onLoadMore: false,
@@ -111,6 +104,7 @@ export default function TabOneScreen() {
       setMultipleState({
         postList: [],
         exceptPostList: '[]',
+        isEndPostList: false,
       })
       if (flatListRef.current) {
         // @ts-ignore

@@ -9,9 +9,7 @@ const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
 
 const CommentItem = ({ comment }: any) => {
   moment.locale('vi')
-  const timeAgoString = moment.unix(comment.updated_at_number).fromNow()
-  console.log('render comment ', comment.id)
-
+  const timeAgoString = moment.unix(comment.updated_at - 1).fromNow()
   return (
     <BottomSheetView style={styles.container}>
       <BottomSheetView style={styles.avatarAuthorBox}>
@@ -20,13 +18,15 @@ const CommentItem = ({ comment }: any) => {
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
       </BottomSheetView>
-      <BottomSheetView style={{ flex: 1 }}>
-        <BottomSheetView style={styles.contentBox}>
-          <Text style={styles.authorName}>{comment.author.uid}</Text>
-          <Text style={styles.commentContent}>{comment.content}</Text>
-        </BottomSheetView>
-        <BottomSheetView style={{ paddingLeft: 14, paddingTop: 2 }}>
-          <Text style={{ fontSize: 14, fontWeight: '500', color: '#353a3d' }}>{timeAgoString}</Text>
+      <BottomSheetView style={{ flex: 1, alignItems: 'flex-start' }}>
+        <BottomSheetView>
+          <BottomSheetView style={styles.contentBox}>
+            <Text style={styles.authorName}>{comment.author.uid}</Text>
+            <Text style={styles.commentContent}>{comment.content}</Text>
+          </BottomSheetView>
+          <BottomSheetView style={{ paddingLeft: 14, paddingTop: 2 }}>
+            <Text style={{ fontSize: 14, fontWeight: '500', color: '#353a3d' }}>{timeAgoString}</Text>
+          </BottomSheetView>
         </BottomSheetView>
       </BottomSheetView>
     </BottomSheetView>
@@ -40,13 +40,12 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   avatarAuthorBox: {
-    width: 50,
-    height: 50,
+    width: 42,
+    height: 42,
     borderRadius: 100,
     overflow: 'hidden',
   },
   contentBox: {
-    flex: 1,
     backgroundColor: '#f0f4f7',
     borderRadius: 20,
     paddingTop: 8,

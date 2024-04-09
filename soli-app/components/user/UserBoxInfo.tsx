@@ -104,7 +104,7 @@ export default function UserBoxInfo({ userUid }: any) {
       <Text style={styles.authorName}>
         {
           // @ts-ignore
-          user?.profile.firstname
+          user?.profile.firstname.split(/\s+/).length < 2 ? user?.profile.full_name : user?.profile.firstname
         }
       </Text>
     </View>

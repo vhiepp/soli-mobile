@@ -1,38 +1,72 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FriendRequestItem from './FriendRequestItem'
 import { Link } from 'expo-router'
+import { useEffect, useState } from 'react'
+import { useFriendApi } from '@/apis'
 
 export default function FriendRequestList() {
+  const [state, setState] = useState({
+    friendRequestList: [],
+    totalFriendRequest: 0,
+  })
+
+  const { getFriendRequestList } = useFriendApi()
+
+  const setMultipleState = (value: any) => {
+    setState((prev) => ({ ...prev, ...value }))
+  }
+
+  const handleGetFriendRequestList = async () => {
+    const data = await getFriendRequestList()
+    if (data && data.total > 0) {
+      setMultipleState({
+        friendRequestList: data.data,
+        totalFriendRequest: data.total,
+      })
+    }
+  }
+
+  console.log('render friend request list')
+
+  useEffect(() => {
+    handleGetFriendRequestList()
+  }, [])
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Text style={[styles.headerText]}>Lời mời kết bạn</Text>
-          <Text style={[styles.headerText, { color: 'red' }]}>2</Text>
+    <>
+      {state.totalFriendRequest > 0 ? (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.headerLeft}>
+              <Text style={[styles.headerText]}>Lời mời kết bạn</Text>
+              <Text style={[styles.headerText, { color: 'red' }]}>{state.totalFriendRequest}</Text>
+            </View>
+            <View>
+              <TouchableOpacity>
+                <Link href={'/friend-request'}>
+                  <Text style={[styles.headerText, styles.textSeeAll]}>Xem tất cả</Text>
+                </Link>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            {state.friendRequestList.slice(0, 4).map((item: any) => (
+              <FriendRequestItem
+                key={`friendrequest-${item.id}`}
+                user={item}
+              />
+            ))}
+          </View>
         </View>
-        <View>
-          <TouchableOpacity>
-            <Link href={'/friend-request'}>
-              <Text style={[styles.headerText, styles.textSeeAll]}>Xem tất cả</Text>
-            </Link>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View>
-        <FriendRequestItem />
-        <FriendRequestItem />
-        <FriendRequestItem />
-        <FriendRequestItem />
-        <FriendRequestItem />
-        <FriendRequestItem />
-      </View>
-    </View>
+      ) : (
+        <View></View>
+      )}
+    </>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 14,
     paddingTop: 14,
     paddingBottom: 12,
   },
@@ -41,6 +75,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 4,
+    paddingHorizontal: 14,
   },
   headerLeft: {
     display: 'flex',

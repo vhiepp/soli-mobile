@@ -12,10 +12,15 @@ const postApi = {
   postListForYou: 'posts/for-you',
 }
 
+const friendApi = {
+  getFriendRequestList: 'friend/request',
+}
+
 export const useApiURL = () => {
   return {
     authApi,
     postApi,
     userApi,
+    friendApi,
   }
 }

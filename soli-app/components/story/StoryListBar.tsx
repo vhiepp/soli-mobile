@@ -2,7 +2,7 @@ import { Dimensions, ScrollView, StyleSheet, View, ViewProps } from 'react-nativ
 import StoryAddItemBar from './StoryAddItemBar'
 import StoryItemBar from './StoryItemBar'
 
-const { width, height } = Dimensions.get('window')
+const { width } = Dimensions.get('window')
 
 export default function StoryListBar(props: ViewProps) {
   const { style, ...ortherProps } = props

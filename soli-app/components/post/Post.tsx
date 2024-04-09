@@ -43,7 +43,7 @@ const Post = ({ post }: any) => {
     <View style={styles.container}>
       {openCommentModal && (
         <CommentBottomSheet
-          openModal={true}
+          openModal={openCommentModal}
           onModalClose={() => {
             setOpenCommentModal(false)
           }}

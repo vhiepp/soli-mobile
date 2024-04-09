@@ -3,9 +3,8 @@ import { FriendRequestList } from '@/components/friend'
 import { FriendScreenHeader } from '@/components/header'
 import { RefreshSpinner } from '@/components/spinner'
 import { Line } from '@/components/theme'
-import { useAuthorization } from '@/hooks'
 import { useState } from 'react'
-import { ScrollView, StatusBar, StyleSheet } from 'react-native'
+import { FlatList, ScrollView, StatusBar, StyleSheet } from 'react-native'
 
 export default function friend() {
   const [refreshing, setRefreshing] = useState(false)
@@ -13,7 +12,6 @@ export default function friend() {
   const onRefresh = () => {
     // goi api
     setRefreshing(true)
-
     // Thực hiện các thao tác tải lại dữ liệu ở đây
     setTimeout(() => {
       setRefreshing(false) // khi hoan thanh
@@ -34,8 +32,7 @@ export default function friend() {
       >
         <FriendScreenHeader />
         <Line />
-        {!refreshing && <FriendRequestList />}
-        <Line />
+        <FriendRequestList />
       </ScrollView>
     </ViewContent>
   )

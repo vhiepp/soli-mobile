@@ -1,12 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Text, StyleSheet, Dimensions, View, TouchableOpacity } from 'react-native'
-import { BottomSheetBackdropProps, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet'
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Text, StyleSheet, Dimensions, View, TouchableOpacity, Button } from 'react-native'
+import {
+  BottomSheetBackdropProps,
+  BottomSheetFlatList,
+  BottomSheetModal,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet'
 import { Line } from '../theme'
 import Animated from 'react-native-reanimated'
-import { InputCommentBottomSheet } from './InputCommentBottomSheet'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { usePostApi } from '@/apis'
 import CommentItem from './CommentItem'
+import InputCommentBottomSheet from './InputCommentBottomSheet'
 
 const { height } = Dimensions.get('window')
 const percentScreen = [0.7, 1]
@@ -18,6 +23,8 @@ export default function CommentBottomSheet(props: any) {
     commentList: [],
     commentListCurrentPage: 1,
   })
+
+  const scrollViewRef = useRef(null)
 
   const setCommentList = (value: any) => {
     setState((prev) => ({ ...prev, commentList: value }))
@@ -31,7 +38,7 @@ export default function CommentBottomSheet(props: any) {
     setState((prev) => ({ ...prev, ...value }))
   }
 
-  const { getCommentListForPostId } = usePostApi()
+  const { getCommentListForPostId, commentForPostId } = usePostApi()
   // ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
@@ -54,13 +61,46 @@ export default function CommentBottomSheet(props: any) {
   const handleGetCommentList = async () => {
     if (state.commentListCurrentPage > 0) {
       const data = await getCommentListForPostId(postId, state.commentListCurrentPage)
-      // @ts-ignore
+
+      if (data.data.length > 0) {
+        // @ts-ignore
+        setMultipleState({
+          commentList: [...state.commentList, ...data.data],
+          commentListCurrentPage:
+            state.commentListCurrentPage === data.last_page ? 0 : state.commentListCurrentPage + 1,
+        })
+      } else {
+        setMultipleState({
+          commentListCurrentPage: 0,
+        })
+      }
+    }
+  }
+
+  const handleSendComment = async (text: string) => {
+    if (text.length > 0) {
+      const data: any = await commentForPostId(postId, text)
+      if (scrollViewRef.current) {
+        // @ts-ignore
+        scrollViewRef.current.scrollTo({ animated: true, offset: 0 })
+      }
       setMultipleState({
-        commentList: [...state.commentList, ...data.data],
-        commentListCurrentPage: state.commentListCurrentPage === data.last_page ? 0 : state.commentListCurrentPage + 1,
+        commentList: [data, ...state.commentList],
       })
     }
   }
+
+  const customBottom = useCallback(
+    (props: any) => {
+      return (
+        <InputCommentBottomSheet
+          {...props}
+          onSendComment={handleSendComment}
+        />
+      )
+    },
+    [state],
+  )
 
   useEffect(() => {
     if (openModal) {
@@ -80,36 +120,15 @@ export default function CommentBottomSheet(props: any) {
       onChange={handleSheetChanges}
       keyboardBehavior="fillParent"
       backdropComponent={CustomBackdrop}
-      footerComponent={(props) => (
-        <InputCommentBottomSheet
-          {...props}
-          // onSendComment={(text: any) => {
-          //   console.log(text)
-          // }}
-        />
-      )}
+      footerComponent={customBottom}
     >
       <View style={styles.contentContainer}>
-        <Text style={styles.textTitle}>Bình luận</Text>
-        <Line style={{ marginTop: 8, borderColor: '#f0f0f0' }} />
-        {/* <BottomSheetVirtualizedList
-          data={commnetList}
-          renderItem={renderItem}
-          getItemCount={(data) => data.length}
-          getItem={(data, index) => data[index]}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          style={{ paddingHorizontal: 12, paddingTop: 12 }}
-          onEndReached={() => {
-            setCommentList((prev) => [...prev, 1])
-          }}
-        /> */}
         <View style={{ flex: 1 }}>
           <BottomSheetScrollView
             style={{ paddingHorizontal: 12, paddingTop: 12 }}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
+            ref={scrollViewRef}
           >
             {state.commentList.map((item: any) => (
               <CommentItem
@@ -138,7 +157,7 @@ export default function CommentBottomSheet(props: any) {
   )
 }
 
-const CustomBackdrop = ({ animatedIndex, style }: BottomSheetBackdropProps) => {
+const CustomBackdrop = memo(({ animatedIndex, style }: BottomSheetBackdropProps) => {
   const containerStyle = useMemo(
     () => [
       style,
@@ -151,17 +170,13 @@ const CustomBackdrop = ({ animatedIndex, style }: BottomSheetBackdropProps) => {
   )
 
   return <Animated.View style={containerStyle} />
-}
+})
 
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     backgroundColor: '#fff',
     paddingBottom: 12,
-  },
-  textTitle: {
-    fontSize: 14,
-    textAlign: 'center',
   },
   btnLoadMore: {
     flexDirection: 'row',
