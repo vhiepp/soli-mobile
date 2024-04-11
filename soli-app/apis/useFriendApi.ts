@@ -19,5 +19,21 @@ export const useFriendApi = () => {
     } catch (error) {}
     return null
   }
-  return { getFriendRequestList, getFriendList }
+
+  const agreedFriendRequest = async (user_request_id: string) => {
+    try {
+      const { data } = await axiosClient.post(friendApi.agreedFriendRequest, { user_request_id })
+      if (!data.error) return true
+    } catch (error) {}
+    return false
+  }
+
+  const deleteFriendRequest = async (user_request_id: string) => {
+    try {
+      const { data } = await axiosClient.delete(friendApi.agreedFriendRequest, { params: { user_request_id } })
+      if (!data.error) return true
+    } catch (error) {}
+    return false
+  }
+  return { getFriendRequestList, getFriendList, agreedFriendRequest, deleteFriendRequest }
 }

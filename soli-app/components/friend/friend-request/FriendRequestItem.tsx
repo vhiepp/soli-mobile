@@ -1,11 +1,32 @@
+import { useFriendApi } from '@/apis'
 import { Image } from 'expo-image'
 import { memo } from 'react'
-import { StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, ToastAndroid, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native'
 
 const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
 
-function FriendRequestItem({ user }: any) {
+function FriendRequestItem({ user, onAgreedFriendRequest }: any) {
   console.log('render friend request item', user.uid)
+
+  const { agreedFriendRequest, deleteFriendRequest } = useFriendApi()
+
+  const handleAgreedFriendRequest = async () => {
+    const data = await agreedFriendRequest(user.id)
+
+    if (data) {
+      ToastAndroid.show('Đã chấp nhận lời mời kết bạn', ToastAndroid.SHORT)
+      onAgreedFriendRequest(user)
+    }
+  }
+
+  const handleDeleteFriendRequest = async () => {
+    const data = await deleteFriendRequest(user.id)
+
+    if (data) {
+      ToastAndroid.show('Đã xóa lời mời kết bạn', ToastAndroid.SHORT)
+      onAgreedFriendRequest(user)
+    }
+  }
 
   return (
     <TouchableNativeFeedback
@@ -28,10 +49,16 @@ function FriendRequestItem({ user }: any) {
             <Text>{user.uid}</Text>
           </View>
           <View style={styles.boxBtn}>
-            <TouchableOpacity style={[styles.btn, styles.btnPrimary]}>
+            <TouchableOpacity
+              style={[styles.btn, styles.btnPrimary]}
+              onPress={handleAgreedFriendRequest}
+            >
               <Text style={[styles.textBtn, styles.textBtnPrimary]}>Chấp nhận</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.btn]}>
+            <TouchableOpacity
+              style={[styles.btn]}
+              onPress={handleDeleteFriendRequest}
+            >
               <Text style={[styles.textBtn]}>Xóa</Text>
             </TouchableOpacity>
           </View>

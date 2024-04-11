@@ -26,6 +26,13 @@ export default function FriendRequestList() {
     }
   }
 
+  const handleAgreedFriendRequest = async (user: any) => {
+    setMultipleState({
+      friendRequestList: [...state.friendRequestList.filter((item: any) => item.id !== user.id)],
+      totalFriendRequest: state.totalFriendRequest > 1 ? state.totalFriendRequest - 1 : 0,
+    })
+  }
+
   console.log('render friend request list')
 
   useEffect(() => {
@@ -54,6 +61,7 @@ export default function FriendRequestList() {
               <FriendRequestItem
                 key={`friendrequest-${item.id}`}
                 user={item}
+                onAgreedFriendRequest={handleAgreedFriendRequest}
               />
             ))}
           </View>

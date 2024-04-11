@@ -20,7 +20,7 @@
     "@react-native-community/netinfo": "11.1.0",
     "@react-navigation/native": "^6.0.2",
     "axios": "^1.6.8",
-    "expo": "~50.0.13",
+    "expo": "~50.0.15",
     "expo-av": "~13.10.5",
     "expo-font": "~11.10.3",
     "expo-image": "~1.10.6",

@@ -6,6 +6,8 @@ import { StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } fro
 const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
 
 function FriendItem({ user }: any) {
+  console.log('render friend item ', user.uid)
+
   return (
     <TouchableNativeFeedback
       // @ts-ignore
