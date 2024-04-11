@@ -7,6 +7,8 @@ import { useColorScheme } from '@/components/useColorScheme'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 import { MainTabBar } from '@/components/tab-bar'
 import { useAuthorization } from '@/hooks'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 export default function TabLayout() {
   useAuthorization()

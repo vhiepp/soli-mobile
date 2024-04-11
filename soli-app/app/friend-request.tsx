@@ -20,6 +20,7 @@ export default function FriendRequest() {
       console.log('load friend request list')
 
       const data = await getFriendRequestList(state.currentPage)
+
       if (data && data.total > 0) {
         setMultipleState({
           friendRequestList: [...state.friendRequestList, ...data.data],

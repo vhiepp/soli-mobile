@@ -8,6 +8,8 @@ import { useEffect, useRef, useState } from 'react'
 import { RefreshSpinner } from '@/components/spinner'
 import { useUserStateContext } from '@/contexts'
 import { usePostApi } from '@/apis'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 export default function TabOneScreen() {
   const [state, setState] = useState({

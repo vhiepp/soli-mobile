@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } fro
 
 const { EXPO_PUBLIC_DEFAULT_AVATAR } = process.env
 
-function FriendItem({}) {
+function FriendItem({ user }: any) {
   return (
     <TouchableNativeFeedback
       // @ts-ignore
@@ -15,13 +15,13 @@ function FriendItem({}) {
         <View style={styles.userInfoBox}>
           <View style={styles.avatarBox}>
             <Image
-              source={EXPO_PUBLIC_DEFAULT_AVATAR}
+              source={user ? user.current_avatar.url : EXPO_PUBLIC_DEFAULT_AVATAR}
               style={{ width: '100%', height: '100%' }}
             />
           </View>
           <View style={styles.nameBox}>
-            <Text style={styles.authorName}>Văn Hiệp</Text>
-            <Text style={{ fontSize: 14, fontWeight: '400', color: '#8f8d8d' }}>_vhiep</Text>
+            <Text style={styles.authorName}>{user.full_name}</Text>
+            <Text style={{ fontSize: 14, fontWeight: '400', color: '#8f8d8d' }}>{user.uid}</Text>
           </View>
         </View>
         <View style={styles.chatBox}>

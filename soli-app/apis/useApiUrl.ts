@@ -13,6 +13,7 @@ const postApi = {
 }
 
 const friendApi = {
+  getFriendList: 'friend',
   getFriendRequestList: 'friend/request',
 }
 
