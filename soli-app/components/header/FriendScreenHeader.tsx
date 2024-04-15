@@ -33,7 +33,12 @@ export default function FriendScreenHeader() {
           <TouchableOpacity style={styles.btnLink}>
             <Text style={styles.textBtnLink}>Theo dõi</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnLink}>
+          <TouchableOpacity
+            style={styles.btnLink}
+            onPress={() => {
+              router.push('/following')
+            }}
+          >
             <Text style={styles.textBtnLink}>Đang theo dõi</Text>
           </TouchableOpacity>
         </View>

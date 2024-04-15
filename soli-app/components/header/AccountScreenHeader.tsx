@@ -1,9 +1,11 @@
 import { useUserStateContext } from '@/contexts'
 import { MaterialCommunityIcons, Octicons, SimpleLineIcons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function AccountScreenHeader() {
   const { signOut } = useUserStateContext()
+  const router = useRouter()
   return (
     <View style={styles.container}>
       <View style={styles.headerLeft}>
@@ -17,7 +19,10 @@ export default function AccountScreenHeader() {
       <View style={styles.headerRight}>
         <TouchableOpacity
           style={[styles.btnAction]}
-          onPress={signOut}
+          onPress={() => {
+            signOut()
+            router.push('/sign-in')
+          }}
         >
           <Octicons
             name="diff-added"

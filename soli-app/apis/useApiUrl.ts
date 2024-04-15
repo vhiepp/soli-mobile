@@ -19,11 +19,16 @@ const friendApi = {
   deleteFriendRequest: 'friend/request',
 }
 
+const followApi = {
+  getFollowingList: 'following',
+}
+
 export const useApiURL = () => {
   return {
     authApi,
     postApi,
     userApi,
     friendApi,
+    followApi,
   }
 }

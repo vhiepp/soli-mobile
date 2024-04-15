@@ -32,7 +32,7 @@ const Post = ({ post }: any) => {
   const handleSharePost = async () => {
     try {
       await Share.share({
-        message: 'Test chia sẻ',
+        message: 'http://172.247.22.242:5500',
       })
     } catch (error) {
       console.error('Error sharing:', error)
