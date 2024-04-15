@@ -1,8 +1,9 @@
 import { useFollowApi } from '@/apis'
 import { FriendItem, FriendItemSkeleton } from '@/components/friend'
 import { RefreshSpinner } from '@/components/spinner'
+import { removeDuplicatesByProperty } from '@/helpers'
 import { useEffect, useState } from 'react'
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 
 export default function FollowingScreen() {
   const [state, setState] = useState({
@@ -26,7 +27,7 @@ export default function FollowingScreen() {
 
       if (data && data.total > 0) {
         setMultipleState({
-          followingList: [...state.followingList, ...data.data],
+          followingList: removeDuplicatesByProperty([...state.followingList, ...data.data], 'uid'),
           totalFollowingList: data.total,
           currentPage: state.currentPage < data.last_page ? state.currentPage + 1 : 0,
           refreshing: false,
@@ -79,7 +80,7 @@ export default function FollowingScreen() {
         showsVerticalScrollIndicator={false}
         onEndReachedThreshold={1}
         onEndReached={handleGetFollowingtList}
-        keyExtractor={(item: any, index: number) => `following-${item.id}`}
+        keyExtractor={(item: any, index: number) => `following-${item.uid}`}
         renderItem={({ item }) => <FriendItem user={item} />}
       />
     </View>

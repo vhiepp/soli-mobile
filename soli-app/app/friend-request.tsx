@@ -1,8 +1,9 @@
 import { useFriendApi } from '@/apis'
 import { FriendRequestItem, FriendRequestItemSkeleton } from '@/components/friend'
 import { RefreshSpinner } from '@/components/spinner'
+import { removeDuplicatesByProperty } from '@/helpers'
 import { useEffect, useState } from 'react'
-import { FlatList, StyleSheet, Text, ToastAndroid, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 
 export default function FriendRequest() {
   const [state, setState] = useState({
@@ -25,7 +26,7 @@ export default function FriendRequest() {
 
       if (data && data.total > 0) {
         setMultipleState({
-          friendRequestList: [...state.friendRequestList, ...data.data],
+          friendRequestList: removeDuplicatesByProperty([...state.friendRequestList, ...data.data], 'uid'),
           totalFriendRequest: data.total,
           currentPage: state.currentPage < data.last_page ? state.currentPage + 1 : 0,
           refreshing: false,

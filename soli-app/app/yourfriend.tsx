@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { useFriendApi } from '@/apis'
 import { RefreshSpinner } from '@/components/spinner'
+import { removeDuplicatesByProperty } from '@/helpers'
 
 export default function YourFriend() {
   const [state, setState] = useState({
@@ -25,7 +26,7 @@ export default function YourFriend() {
 
       if (data && data.total > 0) {
         setMultipleState({
-          friendList: [...state.friendList, ...data.data],
+          friendList: removeDuplicatesByProperty([...state.friendList, ...data.data], 'uid'),
           friendTotal: data.total,
           currentPage: state.currentPage < data.last_page ? state.currentPage + 1 : 0,
           refreshing: false,
@@ -79,7 +80,7 @@ export default function YourFriend() {
         showsVerticalScrollIndicator={false}
         onEndReachedThreshold={1}
         onEndReached={handleGetFriendList}
-        keyExtractor={(item: any) => `friend-${item.id}`}
+        keyExtractor={(item: any) => `friend-${item.uid}`}
         renderItem={({ item }) => <FriendItem user={item} />}
       />
     </View>
